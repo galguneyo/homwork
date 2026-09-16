@@ -2,6 +2,45 @@
 
 Workday HCM과 SAP SuccessFactors의 **반기 릴리스를 추적·비교하는 나만의 에이전트**와, 그 첫 실행 산출물.
 
+## 제출
+
+과제 제출용 설명은 [`SUBMISSION.md`](SUBMISSION.md)에 있습니다.
+
+## 배포 · GitHub Pages
+
+배포 워크플로는 저장소에 들어가 있습니다 — [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml). 저장소가 public이고 이 브랜치가 기본 브랜치라 그대로 서빙됩니다.
+
+**남은 단 하나의 단계는 소유자가 Pages를 한 번 켜는 것입니다.** 워크플로의 `GITHUB_TOKEN`에는 Pages 사이트를 *생성*할 권한이 없어 자동화할 수 없습니다 (`configure-pages`가 `Resource not accessible by integration`으로 실패).
+
+1. 저장소 → **Settings → Pages**
+2. **Source: GitHub Actions** 선택 — `Deploy from a branch`가 아닙니다. 이 워크플로가 배포자입니다
+3. 저장 후 **Actions → Deploy dashboard to GitHub Pages → Run workflow**
+
+그 다음 아래 주소로 열립니다. 루트 `index.html`이 `dashboard/index.html`로 넘겨줍니다.
+
+```
+https://galguneyo.github.io/homwork/
+```
+
+### 워크플로가 하는 일
+
+| 단계 | 목적 |
+|---|---|
+| `node scripts/build-dashboard.js` | 데이터셋에서 대시보드를 다시 생성 |
+| `git diff --exit-code -- dashboard/index.html` | **커밋된 대시보드가 데이터셋과 어긋나면 배포를 실패시킵니다** — JSON만 고치고 빌드를 잊은 채 낡은 페이지가 올라가는 것을 막습니다 |
+| `_site` 조립 → `deploy-pages` | 루트 리디렉트 + 대시보드만 배포 |
+
+첫 실행에서 앞의 두 단계는 **통과**했고(빌드 성공, 최신성 검증 통과) Pages 사이트 생성에서만 멈췄습니다.
+
+### Pages 없이 HTML 받기
+
+| 경로 | 방법 |
+|---|---|
+| GitHub | [`dashboard/index.html`](dashboard/index.html) 화면 → **Download raw file** |
+| 대시보드 | 상단 내비 **HTML 저장 ↓** (`downloads` capability) |
+
+받은 파일은 단일 HTML로 그대로 열립니다 — 오프라인에서는 AI 소견 버튼만 숨겨지고 나머지 기능은 전부 동작합니다.
+
 ## 왜 에이전트인가
 
 두 벤더는 모두 연 2회 릴리스하지만 **분기가 어긋나고, 문서 공개 정책이 반대이며, 패키징 논리도 반대**입니다. 반기마다 이 구조를 처음부터 재구성하면 비싼 작업(판단)이 싼 작업(수집)에 묻힙니다. 이 레포는 수집 절차·증거 규율·대칭 프레임을 고정해 두고, 매 반기 판단에만 집중하기 위한 것입니다.
@@ -85,7 +124,7 @@ node scripts/build-dashboard.js
 - 필수 필드 누락 (`v` · `wave` · `date` · `sku` · `tier` · `en` · `ko` · `src` · `srcName` · `label`)
 - 정의되지 않은 SKU 키 / 벤더 코드
 - 출처가 URL 형식이 아닌 항목
-- 2021–2026 창을 벗어난 일자
+- `현재연도 + 2`를 벗어난 일자 (연도 상한은 열려 있습니다)
 - 인사이트의 `evidence`가 가리키는 마일스톤 부재
 
 ### 대시보드가 담은 것

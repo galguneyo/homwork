@@ -102,10 +102,7 @@ nav.top .navdl[disabled]{opacity:.55; cursor:default}
 .mono2.lead{width:34px; height:34px; border-radius:10px; font-size:15px; color:var(--ink-3)}
 .olinks a:hover .mono2{background:var(--glass-hi); color:var(--ink)}
 @media (max-width:1180px){
-  .mastgrid{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .mastgrid .sub{grid-column:1 / 7}
-  .otherbox{grid-column:1 / 7}
-  .mastgrid .statbar{grid-column:1 / 7}
+  .otherbox{grid-column:1 / 13}
 }
 @media (max-width:620px){
   .mastgrid{grid-template-columns:1fr}
@@ -169,6 +166,7 @@ section{padding-block:clamp(34px,5vw,56px); scroll-margin-top:calc(var(--navh) +
 .lnt{font-size:10.5px; font-weight:600; letter-spacing:.7px}
 .lnt.wd{fill:var(--wd)} .lnt.sf{fill:var(--sf)}
 .finding{margin-top:16px; display:flex; gap:14px; align-items:flex-start; padding:16px 18px; font-size:14px; color:var(--ink-2); border-radius:14px}
+.finding p{max-width:46em}
 .finding b{color:var(--ink)}
 .finding .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; color:var(--ink-3); text-transform:uppercase; white-space:nowrap; padding-top:3px}
 
@@ -288,7 +286,7 @@ table.matrix tr.empty-row{display:none}
 .hit .hd{display:flex; flex-wrap:wrap; gap:4px 9px; align-items:baseline}
 .hit .hd strong{font-size:13.5px}
 .hit .hd span{font-family:var(--mono); font-size:10.5px; color:var(--ink-3)}
-.hit p{font-size:12.5px; color:var(--ink-2); margin-top:4px}
+.hit p{font-size:12.5px; color:var(--ink-2); margin-top:4px; max-width:46em}
 .qlist{margin:0; padding-left:20px}
 .qlist li{font-size:13.5px; color:var(--ink); margin-bottom:8px}
 .qlist li span{display:block; font-size:12px; color:var(--ink-3); margin-top:2px}
@@ -298,15 +296,15 @@ table.matrix tr.empty-row{display:none}
 .airun{white-space:pre-wrap; font-size:13.5px; color:var(--ink); line-height:1.72}
 .airun:empty::after{content:"버튼을 누르면 위 근거만으로 종합 소견을 작성합니다."; color:var(--ink-3)}
 .anote{font-size:12px; color:var(--ink-3); margin-top:11px; padding-top:11px; border-top:1px solid var(--glass-line)}
-.aempty{font-size:13.5px; color:var(--ink-3)}
+.aempty{font-size:13.5px; color:var(--ink-3); max-width:46em}
 @media (max-width:1100px){ .adv{grid-template-columns:1fr} .advin{position:static} }
 @media (max-width:700px){ .pmini{grid-template-columns:1fr} }
-.ins{display:grid; gap:14px}
+.ins{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:start}
 .icard{padding:24px 26px; border-radius:16px}
 .icard h3{font-size:17.5px; margin-bottom:11px; display:flex; gap:13px; align-items:baseline}
 .icard h3 span{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500; flex:none}
-.icard p{font-size:14px; color:var(--ink-2)}
-.icard .sw{margin-top:13px; padding:14px 16px; border-radius:12px; background:var(--glass-2); border:1px solid var(--glass-line); font-size:14px; color:var(--ink)}
+.icard > p{font-size:14px; color:var(--ink-2); max-width:46em}
+.icard .sw{margin-top:13px; max-width:46em; padding:14px 16px; border-radius:12px; background:var(--glass-2); border:1px solid var(--glass-line); font-size:14px; color:var(--ink)}
 .icard .sw em{font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:5px}
 .ev{margin-top:13px; display:flex; flex-wrap:wrap; gap:6px; align-items:center}
 .ev .lbl{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); margin-right:4px}
@@ -328,7 +326,7 @@ table.matrix tr.empty-row{display:none}
 .pcol p{font-size:14px; color:var(--ink-2)}
 .pcol b{color:var(--ink); font-weight:600}
 
-.mgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px}
+.mgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(460px,1fr)); gap:14px}
 .mcard{padding:18px 20px; border-radius:16px}
 .mcard h4{font-size:14px; margin-bottom:9px}
 .mcard p,.mcard li{font-size:13px; color:var(--ink-2)}
@@ -338,7 +336,8 @@ table.matrix tr.empty-row{display:none}
 footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
 
 @media (max-width:1180px){
-  .sdek{max-width:none}
+  .ins{grid-template-columns:minmax(0,1fr)}
+  .mgrid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
   .stage, .stage.open{grid-template-columns:minmax(0,1fr); gap:16px}
   .drawer-inner{width:100%; position:static}
   .matrix-scroll{max-height:none}
@@ -352,6 +351,24 @@ footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
   html{scroll-behavior:auto}
   *{transition:none !important; animation:none !important}
   .drawer-inner{clip-path:none !important}
+}
+
+/* ---- responsive overrides, last in source order so they always win ---- */
+@media (max-width:1180px){
+  .ins{grid-template-columns:minmax(0,1fr)}
+  .mgrid{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+}
+@media (max-width:860px){
+  /* below the grid, the tile boundary no longer exists — hold the same reading
+     measure in em so the prose never widens past it */
+  .sdek, .mastgrid .sub{max-width:46em}
+  .mastgrid .sub{grid-column:1 / 13}
+  .vlock.wd{grid-column:1 / 7}
+  .vlock.sf{grid-column:7 / 13}
+  .mgrid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+}
+@media (max-width:620px){
+  .mastgrid .sub, .vlock.wd, .vlock.sf, .otherbox, .mastgrid .statbar{grid-column:1 / -1}
 }
 </style>
 

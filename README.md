@@ -1,5 +1,7 @@
 # HCM Release Radar
 
+**라이브 대시보드 → https://galguneyo.github.io/homwork/**
+
 Workday HCM과 SAP SuccessFactors의 **반기 릴리스를 추적·비교하는 나만의 에이전트**와, 그 첫 실행 산출물.
 
 ## 제출
@@ -10,17 +12,11 @@ Workday HCM과 SAP SuccessFactors의 **반기 릴리스를 추적·비교하는 
 
 배포 워크플로는 저장소에 들어가 있습니다 — [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml). 저장소가 public이고 이 브랜치가 기본 브랜치라 그대로 서빙됩니다.
 
-**남은 단 하나의 단계는 소유자가 Pages를 한 번 켜는 것입니다.** 워크플로의 `GITHUB_TOKEN`에는 Pages 사이트를 *생성*할 권한이 없어 자동화할 수 없습니다 (`configure-pages`가 `Resource not accessible by integration`으로 실패).
+**배포 완료** — https://galguneyo.github.io/homwork/
 
-1. 저장소 → **Settings → Pages**
-2. **Source: GitHub Actions** 선택 — `Deploy from a branch`가 아닙니다. 이 워크플로가 배포자입니다
-3. 저장 후 **Actions → Deploy dashboard to GitHub Pages → Run workflow**
+루트 `index.html`이 `dashboard/index.html`로 넘겨줍니다. 이후 이 브랜치로 푸시할 때마다 자동 재배포됩니다.
 
-그 다음 아래 주소로 열립니다. 루트 `index.html`이 `dashboard/index.html`로 넘겨줍니다.
-
-```
-https://galguneyo.github.io/homwork/
-```
+> Pages 활성화(Settings → Pages → Source: **GitHub Actions**)는 최초 1회 수동 단계였습니다. 워크플로의 `GITHUB_TOKEN`에는 Pages 사이트를 *생성*할 권한이 없어 (`configure-pages`가 `Resource not accessible by integration`으로 실패) 자동화할 수 없었고, 활성화 이후에는 워크플로가 전 과정을 처리합니다.
 
 ### 워크플로가 하는 일
 
@@ -30,7 +26,7 @@ https://galguneyo.github.io/homwork/
 | `git diff --exit-code -- dashboard/index.html` | **커밋된 대시보드가 데이터셋과 어긋나면 배포를 실패시킵니다** — JSON만 고치고 빌드를 잊은 채 낡은 페이지가 올라가는 것을 막습니다 |
 | `_site` 조립 → `deploy-pages` | 루트 리디렉트 + 대시보드만 배포 |
 
-첫 실행에서 앞의 두 단계는 **통과**했고(빌드 성공, 최신성 검증 통과) Pages 사이트 생성에서만 멈췄습니다.
+Pages 활성화 후 실행(run #4)에서 **build · deploy 두 잡의 모든 단계가 성공**했고, `deploy-pages`가 `Reported success!` 와 위 URL을 반환했습니다.
 
 ### Pages 없이 HTML 받기
 

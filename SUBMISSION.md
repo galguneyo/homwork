@@ -7,6 +7,7 @@
 | | |
 |---|---|
 | 제출자 | shawn.jihoon.joo@gmail.com |
+| 라이브 대시보드 | https://galguneyo.github.io/homwork/ |
 | 저장소 | `galguneyo/homwork` · 브랜치 `claude/eager-heisenberg-4wulfm` |
 | 에이전트 | `.claude/skills/hcm-release-radar/` · `.claude/agents/hcm-release-radar.md` |
 | 산출물 ① | `output/2026-09-16_workday-2026R2_vs_sfsf-2H2026.md` — 반기 브리핑 |
@@ -134,6 +135,8 @@ node scripts/build-dashboard.js
 미확인 항목 11건은 산출물과 대시보드 양쪽에 목록으로 남아 있습니다.
 
 ## 7. 평가자가 30초에 확인할 것
+
+브라우저에서 바로 → https://galguneyo.github.io/homwork/
 
 1. **대시보드 §06 방법론** — 한계를 숨기지 않고 먼저 말하는지
 2. **§03 고객 상황 진단에 "오늘 날씨가 좋네요" 입력** — 근거가 없을 때 지어내는지, 빈 결과를 내놓는지

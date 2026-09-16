@@ -1,55 +1,18 @@
-<title>HCM Release Atlas</title>
+<title>Global SaaS HCM — Good to Know</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
 <style>
 :root{
-  --ground:#EEF1FB;
-  --glass:rgba(255,255,255,.66);
-  --glass-2:rgba(255,255,255,.44);
-  --glass-line:rgba(18,32,64,.10);
-  --glass-hi:rgba(255,255,255,.85);
-  --ink:#101A2E; --ink-2:#405270; --ink-3:#6C809E;
-  --wd:#1259A8; --sf:#A85A1A;
-  --wd-glow:rgba(18,89,168,.14); --sf-glow:rgba(168,90,26,.16);
-  --good:#1F6B4C; --good-fill:rgba(31,107,76,.12);
-  --care:#93283C; --care-fill:rgba(147,40,60,.11);
-  --crit:#A8261E;
-  --a1:#7C3AED; --a2:#06B6D4; --a3:#10B981; --a4:#DB2777;
-  --a-op:.30; --blob-blur:110px;
-  --panel:rgba(255,255,255,.90); --panel-2:rgba(249,250,254,.97);
-  --ring:0 0 0 1px rgba(18,32,64,.07);
-  --lift:0 20px 50px -28px rgba(16,26,46,.45);
-  --sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
-  --navh:54px;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ground:#060A12;
-    --glass:rgba(255,255,255,.048);
-    --glass-2:rgba(255,255,255,.028);
-    --glass-line:rgba(255,255,255,.088);
-    --glass-hi:rgba(255,255,255,.16);
-    --ink:#E9F0FA; --ink-2:#A3B4CE; --ink-3:#71849F;
-    --wd:#4A8FE0; --sf:#C87E30;
-    --wd-glow:rgba(74,143,224,.20); --sf-glow:rgba(200,126,48,.22);
-    --good:#4FC08D; --good-fill:rgba(79,192,141,.14);
-    --care:#E8879A; --care-fill:rgba(232,135,154,.13);
-    --crit:#F0786B;
-    --a1:#6D28D9; --a2:#0891B2; --a3:#059669; --a4:#BE185D;
-    --a-op:.55; --blob-blur:130px;
-    --panel:rgba(11,16,28,.88); --panel-2:rgba(14,20,33,.97);
-    --ring:0 0 0 1px rgba(255,255,255,.05);
-    --lift:0 24px 60px -30px rgba(0,0,0,.85);
-  }
-}
-:root[data-theme="dark"]{
+  /* Deliberately single-theme: the aurora is one committed visual world, so the
+     page paints the same palette whatever theme the viewer's host is in. */
+  color-scheme: dark;
   --ground:#060A12;
   --glass:rgba(255,255,255,.048);
   --glass-2:rgba(255,255,255,.028);
   --glass-line:rgba(255,255,255,.088);
   --glass-hi:rgba(255,255,255,.16);
+  --panel:rgba(11,16,28,.88); --panel-2:rgba(14,20,33,.97);
   --ink:#E9F0FA; --ink-2:#A3B4CE; --ink-3:#71849F;
   --wd:#4A8FE0; --sf:#C87E30;
   --wd-glow:rgba(74,143,224,.20); --sf-glow:rgba(200,126,48,.22);
@@ -58,9 +21,12 @@
   --crit:#F0786B;
   --a1:#6D28D9; --a2:#0891B2; --a3:#059669; --a4:#BE185D;
   --a-op:.55; --blob-blur:130px;
-  --panel:rgba(11,16,28,.88); --panel-2:rgba(14,20,33,.97);
   --ring:0 0 0 1px rgba(255,255,255,.05);
   --lift:0 24px 60px -30px rgba(0,0,0,.85);
+  --sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --navh:54px;
+  --measure:1400px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; scroll-padding-top:calc(var(--navh) + 18px)}
@@ -106,11 +72,40 @@ nav.top .links a.navx{color:var(--ink-2); border:1px solid var(--glass-line); ba
 nav.top .links a.navx:hover{color:var(--ink)}
 
 .mast{padding-block:clamp(38px,6vw,70px) 26px}
+.mast h1 .h1b{font-weight:300; color:var(--ink-3); -webkit-text-fill-color:var(--ink-3); letter-spacing:-.01em; white-space:nowrap}
 .mast h1{font-size:clamp(30px,5vw,54px); font-weight:700; letter-spacing:-.035em;
   background:linear-gradient(104deg,var(--ink) 30%,color-mix(in srgb,var(--a2) 60%,var(--ink)) 62%,color-mix(in srgb,var(--a1) 55%,var(--ink)) 92%);
   -webkit-background-clip:text; background-clip:text; color:transparent}
 .mast .sub{color:var(--ink-2); max-width:62ch; margin-top:14px; font-size:16px}
-.vendorbar{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:26px; max-width:740px}
+.mastgrid{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:14px; margin-top:20px; align-items:stretch}
+.asgrid{display:contents}
+.mastgrid .sub{grid-column:1 / 7; max-width:none; margin:0 0 6px; font-size:15.5px; line-height:1.66}
+.vlock.wd{grid-column:1 / 4}
+.vlock.sf{grid-column:4 / 7}
+.otherbox{grid-column:7 / 13}
+.mastgrid .statbar{grid-column:1 / 13; margin-top:12px}
+.otherbox .sk{text-transform:none; letter-spacing:.01em; font-family:var(--sans); font-size:11.5px}
+.ogroup{display:flex; gap:11px; align-items:flex-start}
+.olabel{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  padding-top:7px; white-space:nowrap; width:40px; flex:none}
+.olinks{display:flex; flex-wrap:wrap; gap:6px}
+.olinks a{display:inline-flex; align-items:center; gap:7px; padding:4px 10px 4px 4px; border-radius:9px; font-size:11.5px;
+  border:1px solid var(--glass-line); background:var(--glass-2); color:var(--ink-2); border-bottom:1px solid var(--glass-line)}
+.olinks a:hover{color:var(--ink); background:var(--glass); border-color:var(--glass-hi)}
+.mono2{width:22px; height:22px; border-radius:6px; display:grid; place-items:center; flex:none;
+  font-family:var(--mono); font-size:9.5px; font-weight:600; background:var(--glass-line); color:var(--ink-2)}
+.mono2.lead{width:34px; height:34px; border-radius:10px; font-size:15px; color:var(--ink-3)}
+.olinks a:hover .mono2{background:var(--glass-hi); color:var(--ink)}
+@media (max-width:1180px){
+  .mastgrid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .mastgrid .sub{grid-column:1 / 7}
+  .otherbox{grid-column:1 / 7}
+  .mastgrid .statbar{grid-column:1 / 7}
+}
+@media (max-width:620px){
+  .mastgrid{grid-template-columns:1fr}
+  .mastgrid .sub,.vlock.wd,.vlock.sf,.otherbox,.mastgrid .statbar{grid-column:1 / -1}
+}
 .vlock{display:flex; flex-direction:column; gap:12px; padding:14px 16px; border-radius:14px;
   background:var(--glass); border:1px solid var(--glass-line); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px)}
 .vtop{display:flex; align-items:center; gap:11px}
@@ -123,12 +118,11 @@ nav.top .links a.navx:hover{color:var(--ink)}
 .vlinks a:hover{color:var(--ink); background:var(--glass); border-color:var(--glass-hi)}
 .vlinks i{font-style:normal; font-family:var(--mono); font-size:9px; letter-spacing:.08em; padding:1px 5px; border-radius:4px;
   background:var(--glass-line); color:var(--ink-3)}
-@media (max-width:620px){ .vendorbar{grid-template-columns:1fr} }
 .vlock.wd{box-shadow:0 0 34px -14px var(--wd-glow)}
 .vlock.sf{box-shadow:0 0 34px -14px var(--sf-glow)}
 .vmark{flex:none; display:block; border-radius:10px}
 
-.statbar{display:grid; grid-template-columns:repeat(auto-fit,minmax(152px,1fr)); gap:1px; margin-top:26px;
+.statbar{display:grid; grid-template-columns:repeat(auto-fit,minmax(152px,1fr)); gap:1px;
   border-radius:16px; overflow:hidden; background:var(--glass-line)}
 .stat{background:var(--glass); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); padding:16px 20px}
 .stat b{display:block; font-family:var(--mono); font-size:26px; font-weight:600; letter-spacing:-.025em; line-height:1.15}
@@ -359,7 +353,7 @@ footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
 
 <nav class="top">
   <div class="in">
-    <a class="brand" href="#top">HCM Release Atlas</a>
+    <a class="brand" href="#top">Global SaaS HCM</a>
     <div class="links">
       <a href="#rhythm">릴리스 리듬</a>
       <a href="#matrix">SKU 매트릭스</a>
@@ -377,10 +371,13 @@ footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
 <main class="wrap" id="top">
   <header class="mast">
     <p class="eyebrow" id="span">릴리스 아틀라스</p>
-    <h1>Workday HCM &amp; SAP SuccessFactors</h1>
-    <p class="sub"><span id="spanYears"></span> 반기 릴리스와 개발 로드맵을 SKU·기능영역 축으로 정렬하고, 한국 기업 HR Practice 관점의 적용 Benefit과 Consideration을 붙였습니다.</p>
-    <div class="vendorbar" id="vendorbar"></div>
-    <div class="statbar" id="statbar"></div>
+    <h1>Global SaaS HCM <span class="h1b">— Good to Know</span></h1>
+    <div class="mastgrid">
+      <p class="sub"><span id="spanYears"></span> 반기 릴리스와 개발 로드맵을 SKU·기능영역 축으로 정렬하고, 한국 기업 HR Practice 관점의 적용 Benefit과 Consideration을 붙였습니다.</p>
+      <div class="asgrid" id="vendorbar"></div>
+      <div class="vlock otherbox" id="otherbox"></div>
+      <div class="statbar" id="statbar"></div>
+    </div>
   </header>
 
   <section id="rhythm">
@@ -474,7 +471,7 @@ footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
 </main>
 
 <footer class="wrap">
-  <p>HCM Release Atlas · 데이터 기준일 <span class="mono" id="compiled"></span> · 마일스톤은 선별 수록이며 전체 기능 목록이 아닙니다. 각 항목의 출처 링크는 드로어에서 확인할 수 있습니다.</p>
+  <p>Global SaaS HCM — Good to Know · 데이터 기준일 <span class="mono" id="compiled"></span> · 마일스톤은 선별 수록이며 전체 기능 목록이 아닙니다. 각 항목의 출처 링크는 드로어에서 확인할 수 있습니다.</p>
 </footer>
 
 <script>
@@ -526,6 +523,32 @@ const VLINKS = {
   sf:[{t:"SAP Community",     u:"https://pages.community.sap.com/topics/successfactors", g:"공개"},
       {t:"What's New Viewer", u:"https://help.sap.com/whats-new/8fcf4960eea24f78b1d7613da406a885", g:"공개"}]
 };
+/* Reference links only — these products are not tracked by this atlas.
+   Every URL below was verified during compilation; monograms are this page's
+   own device, not any vendor's mark. */
+const OTHERS = [
+  {label:"글로벌", items:[
+    {m:"AD", n:"ADP",         u:"https://www.adp.com"},
+    {m:"UK", n:"UKG",         u:"https://www.ukg.com"},
+    {m:"OR", n:"Oracle HCM",  u:"https://www.oracle.com/human-capital-management/"},
+    {m:"DF", n:"Dayforce",    u:"https://www.dayforce.com"},
+    {m:"CS", n:"Cornerstone", u:"https://www.cornerstoneondemand.com"},
+    {m:"BH", n:"BambooHR",    u:"https://www.bamboohr.com"}
+  ]},
+  {label:"국내", items:[
+    {m:"휴", n:"휴넬 · HCG",   u:"https://www.e-hcg.com"},
+    {m:"IS", n:"이수시스템",    u:"https://www.isusystem.com"},
+    {m:"fx", n:"flex",        u:"https://flex.team"}
+  ]}
+];
+document.getElementById("otherbox").innerHTML =
+  '<div class="vtop"><span class="mono2 lead">+</span>'+
+    '<span class="txt"><span class="nm">기타 Enterprise SaaS HCM</span>'+
+    '<span class="sk">참고 링크 · 본 아틀라스 추적 대상 아님</span></span></div>'+
+  OTHERS.map(g=>'<div class="ogroup"><span class="olabel">'+esc(g.label)+'</span><div class="olinks">'+
+    g.items.map(i=>'<a href="'+esc(i.u)+'" target="_blank" rel="noopener"><span class="mono2">'+esc(i.m)+'</span>'+esc(i.n)+'</a>').join("")+
+    '</div></div>').join("");
+
 document.getElementById("vendorbar").innerHTML = ["wd","sf"].map(v =>
   '<div class="vlock '+v+'">'+
     '<div class="vtop">'+mark(v,34)+
@@ -1119,7 +1142,7 @@ document.getElementById("compiled").textContent = DATA.meta.compiled;
 (function(){
   const y0=YEARS[0], y1=YEARS[YEARS.length-1], halves=YEARS.length*2;
   const dataYears = Array.from(new Set(DATA.milestones.map(yearOf))).sort((a,b)=>a-b);
-  document.getElementById("span").textContent = y0+" – "+y1+" · 릴리스 아틀라스";
+  document.getElementById("span").textContent = "WORKDAY · SAP SUCCESSFACTORS · "+y0+"–"+y1;
   document.getElementById("spanYears").textContent =
     (dataYears[dataYears.length-1]-dataYears[0]+1)+"년치";
   document.getElementById("spanAxis").textContent =

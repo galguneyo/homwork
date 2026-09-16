@@ -1,0 +1,481 @@
+<title>HCM Release Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F6; --surface:#FFFFFF; --surface-2:#E9EDEF; --surface-3:#DFE5E8;
+  --ink:#0E1619; --ink-2:#44565D; --ink-3:#73878F;
+  --line:#D2DADD; --line-soft:#E4E9EB;
+  --wd:#A85A1A; --sf:#1259A8;
+  --wd-fill:rgba(168,90,26,.11); --sf-fill:rgba(18,89,168,.10);
+  --good:#2F6B4F; --good-fill:rgba(47,107,79,.10);
+  --care:#9B3341; --care-fill:rgba(155,51,65,.09);
+  --crit:#A8261E;
+  --shadow:0 1px 2px rgba(14,22,25,.05), 0 8px 24px -12px rgba(14,22,25,.18);
+  --sans:"IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1113; --surface:#121A1D; --surface-2:#1A2429; --surface-3:#222E34;
+    --ink:#E6EDEF; --ink-2:#A6B7BD; --ink-3:#7A8D95;
+    --line:#27343A; --line-soft:#1D282D;
+    --wd:#C87E30; --sf:#4A8FE0;
+    --wd-fill:rgba(200,126,48,.15); --sf-fill:rgba(74,143,224,.14);
+    --good:#5FAF87; --good-fill:rgba(95,175,135,.13);
+    --care:#E08494; --care-fill:rgba(224,132,148,.12);
+    --crit:#E8756A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1113; --surface:#121A1D; --surface-2:#1A2429; --surface-3:#222E34;
+  --ink:#E6EDEF; --ink-2:#A6B7BD; --ink-3:#7A8D95;
+  --line:#27343A; --line-soft:#1D282D;
+  --wd:#C87E30; --sf:#4A8FE0;
+  --wd-fill:rgba(200,126,48,.15); --sf-fill:rgba(74,143,224,.14);
+  --good:#5FAF87; --good-fill:rgba(95,175,135,.13);
+  --care:#E08494; --care-fill:rgba(224,132,148,.12);
+  --crit:#E8756A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.62; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0}
+h1,h2,h3,h4{text-wrap:balance; margin:0; line-height:1.25; font-weight:600; letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--sf); text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--sf) 35%, transparent)}
+a:hover{border-bottom-color:var(--sf)}
+:focus-visible{outline:2px solid var(--sf); outline-offset:2px; border-radius:3px}
+.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:500}
+
+.mast{border-bottom:1px solid var(--line); background:var(--surface)}
+.mast-in{display:flex; flex-wrap:wrap; gap:20px 32px; align-items:flex-end; justify-content:space-between; padding-block:34px 26px}
+.mast h1{font-size:clamp(28px,4.4vw,42px); font-weight:700; letter-spacing:-.025em}
+.mast .sub{color:var(--ink-2); max-width:56ch; margin-top:10px; font-size:15px}
+.legend{display:flex; gap:18px; flex-wrap:wrap; align-items:center}
+.lg{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--ink-2)}
+.lg i{width:11px; height:11px; border-radius:2px; display:block}
+.lg.wd i{background:var(--wd)}
+.lg.sf i{background:var(--sf)}
+.statbar{display:flex; flex-wrap:wrap; border-top:1px solid var(--line-soft); margin-top:4px}
+.stat{padding:14px 26px 14px 0; margin-right:26px; border-right:1px solid var(--line-soft)}
+.stat:last-child{border-right:0; margin-right:0}
+.stat b{display:block; font-family:var(--mono); font-size:22px; font-weight:600; letter-spacing:-.02em}
+.stat span{font-size:12px; color:var(--ink-3)}
+
+section{padding-block:44px; border-bottom:1px solid var(--line-soft)}
+.shead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.shead h2{font-size:22px}
+.shead .n{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500}
+.sdek{color:var(--ink-2); max-width:70ch; font-size:14.5px; margin-bottom:22px}
+
+.chartbox{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 16px 12px; overflow-x:auto}
+.chartbox svg{display:block; min-width:760px; width:100%; height:auto}
+#rhythmChart text{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.ax-year{fill:var(--ink); font-size:13px; font-weight:600}
+.ax-half{fill:var(--ink-3); font-size:10px; letter-spacing:.5px}
+.ax-today{fill:var(--ink-3); font-size:10.5px}
+.grid-l{stroke:var(--line-soft); stroke-width:1; fill:none}
+.rail-l{stroke:var(--line); stroke-width:1.5; fill:none}
+.conn-l{stroke:var(--line); stroke-width:1; stroke-dasharray:2 3; fill:none}
+.today-l{stroke:var(--ink-3); stroke-width:1.5; stroke-dasharray:4 3; fill:none}
+.mk{stroke-width:2}
+.mk.wd{stroke:var(--wd); fill:var(--wd)}
+.mk.sf{stroke:var(--sf); fill:var(--sf)}
+.mk.hollow{fill:var(--surface)}
+.dt{font-size:10px; font-weight:600}
+.dt.wd{fill:var(--wd)}
+.dt.sf{fill:var(--sf)}
+.lnt{font-size:11px; font-weight:600; letter-spacing:.6px}
+.lnt.wd{fill:var(--wd)}
+.lnt.sf{fill:var(--sf)}
+.finding{margin-top:16px; display:flex; gap:12px; align-items:flex-start; background:var(--surface-2); border-radius:8px; padding:14px 16px; font-size:14px; color:var(--ink-2)}
+.finding b{color:var(--ink)}
+.finding .k{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase; white-space:nowrap; padding-top:3px}
+
+.controls{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin-bottom:18px}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--surface)}
+.seg button{appearance:none; border:0; background:transparent; font:inherit; font-size:13px; color:var(--ink-2); padding:7px 13px; cursor:pointer; border-right:1px solid var(--line-soft)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--bg); font-weight:500}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{appearance:none; font:inherit; font-size:12.5px; padding:5px 11px; border-radius:20px; border:1px solid var(--line); background:var(--surface); color:var(--ink-2); cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+input[type="search"]{font:inherit; font-size:13px; padding:7px 11px; border-radius:7px; border:1px solid var(--line); background:var(--surface); color:var(--ink); min-width:190px; max-width:100%}
+.count{font-family:var(--mono); font-size:12px; color:var(--ink-3)}
+
+.matrix-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table.matrix{border-collapse:collapse; width:100%; min-width:940px}
+table.matrix th, table.matrix td{border-bottom:1px solid var(--line-soft); border-right:1px solid var(--line-soft); vertical-align:top; text-align:left}
+table.matrix thead th{position:sticky; top:0; background:var(--surface-2); z-index:2; padding:9px 12px; font-family:var(--mono); font-size:12px; font-weight:600; color:var(--ink-2); letter-spacing:.04em}
+table.matrix thead th:first-child{z-index:3}
+table.matrix tbody th{padding:12px; width:186px; min-width:186px; background:var(--surface); position:sticky; left:0; z-index:1; font-weight:500}
+table.matrix tbody th .ko{font-size:13.5px; display:block}
+table.matrix tbody th .en{font-family:var(--mono); font-size:10.5px; color:var(--ink-3); letter-spacing:.05em; text-transform:uppercase}
+table.matrix td{padding:7px; min-width:124px}
+table.matrix tr.empty-row{display:none}
+.cellwrap{display:flex; flex-direction:column; gap:5px}
+.mchip{appearance:none; font:inherit; text-align:left; width:100%; cursor:pointer; font-size:12px; line-height:1.35; padding:6px 8px 6px 9px; border-radius:5px; border:1px solid var(--line); background:var(--surface); border-left-width:3px; color:var(--ink); transition:background .12s ease}
+.mchip:hover{background:var(--surface-2)}
+.mchip.wd{border-left-color:var(--wd)}
+.mchip.sf{border-left-color:var(--sf)}
+.mchip.is-depr{border-left-color:var(--crit)}
+.mchip[aria-current="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.mchip .w{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; opacity:.62; margin-bottom:1px}
+
+.detail{margin-top:18px; border:1px solid var(--line); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden}
+.detail-head{padding:16px 20px 12px; border-bottom:1px solid var(--line-soft); display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center}
+.vtag{font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.06em; padding:3px 9px; border-radius:4px}
+.vtag.wd{background:var(--wd-fill); color:var(--wd)}
+.vtag.sf{background:var(--sf-fill); color:var(--sf)}
+.tier{font-family:var(--mono); font-size:11px; color:var(--ink-3); border:1px solid var(--line); border-radius:4px; padding:2px 7px}
+.detail-body{display:grid; grid-template-columns:1fr 1fr}
+.dpane{padding:18px 20px}
+.dpane+.dpane{border-left:1px solid var(--line-soft)}
+.dpane .eyebrow{margin-bottom:8px; display:block}
+.dpane p{font-size:14px; color:var(--ink-2)}
+.dpane.ko p{color:var(--ink)}
+.detail-foot{padding:12px 20px 16px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:6px 16px}
+.detail-foot b{color:var(--ink-2)}
+.empty-detail{padding:26px 20px; color:var(--ink-3); font-size:14px}
+
+.ins{display:grid; gap:14px}
+.icard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 22px}
+.icard h3{font-size:17px; margin-bottom:10px; display:flex; gap:12px; align-items:baseline}
+.icard h3 span{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500; flex:none}
+.icard p{font-size:14px; color:var(--ink-2)}
+.icard .sw{margin-top:12px; padding:12px 14px; border-radius:7px; background:var(--surface-2); font-size:14px; color:var(--ink)}
+.icard .sw em{font-style:normal; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:4px}
+.ev{margin-top:12px; display:flex; flex-wrap:wrap; gap:5px; align-items:center}
+.ev .lbl{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); margin-right:3px}
+.evb{appearance:none; font:inherit; font-family:var(--mono); font-size:11px; padding:3px 8px; border-radius:4px; border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2); cursor:pointer}
+.evb:hover{background:var(--surface-3)}
+.evb.wd{border-left:2px solid var(--wd)}
+.evb.sf{border-left:2px solid var(--sf)}
+
+.prow{background:var(--surface); border:1px solid var(--line); border-radius:10px; margin-bottom:12px; overflow:hidden}
+.ptitle{padding:14px 20px; border-bottom:1px solid var(--line-soft); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; background:var(--surface-2)}
+.ptitle h3{font-size:16px}
+.ptitle .en{font-family:var(--mono); font-size:11px; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase}
+.pcols{display:grid; grid-template-columns:1fr 1fr}
+.pcol{padding:16px 20px 18px}
+.pcol+.pcol{border-left:1px solid var(--line-soft)}
+.ptag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; font-weight:600; padding:3px 9px; border-radius:4px; margin-bottom:9px}
+.pcol.b .ptag{background:var(--good-fill); color:var(--good)}
+.pcol.c .ptag{background:var(--care-fill); color:var(--care)}
+.pcol p{font-size:14px; color:var(--ink-2)}
+.pcol b{color:var(--ink); font-weight:600}
+
+.mgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+.mcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+.mcard h4{font-size:14px; margin-bottom:8px}
+.mcard p, .mcard li{font-size:13px; color:var(--ink-2)}
+.mcard ul{margin:0; padding-left:18px}
+.mcard li{margin-bottom:5px}
+.warn{border-left:3px solid var(--care)}
+footer{padding-block:28px 40px; color:var(--ink-3); font-size:12.5px}
+
+@media (max-width:760px){
+  .detail-body, .pcols{grid-template-columns:1fr}
+  .dpane+.dpane, .pcol+.pcol{border-left:0; border-top:1px solid var(--line-soft)}
+  .stat{padding-right:18px; margin-right:18px}
+  section{padding-block:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-in">
+      <div>
+        <p class="eyebrow">2021 – 2026 · 릴리스 아틀라스</p>
+        <h1>Workday HCM &amp; SAP SuccessFactors</h1>
+        <p class="sub">6년치 반기 릴리스와 개발 로드맵을 SKU·기능영역 축으로 정렬하고, 한국 기업 HR Practice 관점의 적용 Benefit과 Consideration을 붙였습니다.</p>
+      </div>
+      <div class="legend">
+        <span class="lg wd"><i></i> Workday HCM</span>
+        <span class="lg sf"><i></i> SAP SuccessFactors</span>
+      </div>
+    </div>
+    <div class="statbar" id="statbar"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="rhythm">
+    <div class="shead"><span class="n">01</span><h2>릴리스 리듬 — 두 벤더는 항상 어긋난다</h2></div>
+    <p class="sdek">가로축은 2021년 상반기부터 2026년 하반기까지 12개 반기입니다. 각 반기 안에서 두 벤더의 production 시점이 어디에 놓이는지를 표시했습니다. <b>속이 찬 표식</b>은 본 데이터셋에서 일자가 확인된 릴리스, <b>속이 빈 표식</b>은 반기만 확인되고 정확한 일자는 미확인인 릴리스입니다.</p>
+    <div class="chartbox"><div id="rhythmChart"></div></div>
+    <div class="finding">
+      <span class="k">읽는 법</span>
+      <p><b>Workday는 각 반기의 가운데(3월·9월), SAP는 각 반기의 끝(5월·11월)에 production을 둡니다.</b> 2026년 확인 일자 기준으로 간격은 정확히 두 달입니다 — 3/14 → 5/15, 9/19 → 11/13. 두 제품을 함께 쓰는 조직에게 이것은 "연 2회 릴리스 대응"이 아니라 <b>연 4회의 검증 창</b>을 뜻합니다.</p>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="shead"><span class="n">02</span><h2>시점 × SKU 매트릭스</h2><span class="count" id="mcount"></span></div>
+    <p class="sdek">행은 기능영역(SKU), 열은 연도입니다. 항목을 누르면 영어 원문과 한글 해설, 출처가 아래에 열립니다. 수록 기준은 <b>구조나 전략을 바꾼 변화</b>이며, 벤더가 반기마다 내놓는 250여 건의 전체 기능 목록이 아닙니다.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="벤더 필터">
+        <button type="button" id="v-all" data-v="all" aria-pressed="true">전체</button>
+        <button type="button" id="v-wd" data-v="wd" aria-pressed="false">Workday</button>
+        <button type="button" id="v-sf" data-v="sf" aria-pressed="false">SuccessFactors</button>
+      </div>
+      <div class="chips" id="tagChips"></div>
+      <input type="search" id="q" placeholder="키워드 검색 (예: Joule, 스킬, 폐기)" aria-label="키워드 검색">
+    </div>
+    <div class="matrix-scroll"><table class="matrix" id="matrixTable"></table></div>
+    <div class="detail" id="detail"><div class="empty-detail">위 매트릭스에서 항목을 선택하면 영어 원문 · 한글 해설 · 출처가 여기에 표시됩니다.</div></div>
+  </section>
+
+  <section id="insights">
+    <div class="shead"><span class="n">03</span><h2>6년 이력에서 도출한 인사이트</h2></div>
+    <p class="sdek">각 인사이트의 <span class="mono">근거</span> 표식을 누르면 해당 마일스톤이 매트릭스에서 열립니다. 결론은 컨설턴트 해석이며, 벤더의 주장이 아닙니다.</p>
+    <div class="ins" id="insights-list"></div>
+  </section>
+
+  <section id="practice">
+    <div class="shead"><span class="n">04</span><h2>한국 HR Practice 적용 — Benefit &amp; Consideration</h2></div>
+    <p class="sdek">국내 기업의 인사 제도·노무 관행·법령 환경에 비추어 정리했습니다. 법령 언급은 검토가 필요한 지점을 가리키는 것이며, 법률 자문이 아닙니다.</p>
+    <div id="practice-list"></div>
+  </section>
+
+  <section id="method">
+    <div class="shead"><span class="n">05</span><h2>방법론과 한계</h2></div>
+    <div class="mgrid">
+      <div class="mcard">
+        <h4>출처 등급</h4>
+        <ul id="tierlist"></ul>
+      </div>
+      <div class="mcard warn">
+        <h4>문서 접근성 비대칭 — 반드시 감안할 것</h4>
+        <p>Workday는 기능 단위 릴리스 노트를 <b>Community 로그인 고객에게만</b> 공개하고, SAP는 What's New Viewer를 <b>공개</b>합니다. 그 결과 어느 반기든 공개 기록의 깊이는 SAP 쪽이 항상 더 깊습니다. 이 대시보드에서 Workday 항목 수가 적은 것은 <b>문서 정책의 산물이지 릴리스 내용의 빈약함이 아닙니다.</b> 항목 수를 벤더의 출시량으로 읽지 마십시오.</p>
+      </div>
+      <div class="mcard warn">
+        <h4>수집 환경 제약</h4>
+        <p>본 데이터는 벤더 도메인 직접 열람이 차단된 환경에서 수집되어, <span class="mono">T1</span> 근거 일부가 <span class="mono">T1*</span>(벤더 페이지를 지목했으나 검색 요약으로 읽음)로 강등되어 있습니다. 고객 배포용 자료에 인용하기 전 원문 URL을 직접 확인하십시오.</p>
+      </div>
+      <div class="mcard">
+        <h4>남은 공백</h4>
+        <ul>
+          <li>Workday 2022R1 · 2026R2의 기능 단위 목록 (Community 로그인 필요)</li>
+          <li>SAP 2H 2026 기능 목록 — 2026-10-12 preview 이후 갱신 대상</li>
+          <li>ECP 지원 국가 총수 — 출처가 50 / 53 / 60으로 충돌 (한국 포함은 일치)</li>
+          <li>SAP 측 AI 과금 구조 — Workday Flex Credits와의 TCO 대칭 비교 불가</li>
+          <li>Workday Recruiting Agent의 70% · 55% 수치 산출 근거</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>HCM Release Atlas · 데이터 기준일 <span class="mono">2026-09-16</span> · 마일스톤은 선별 수록이며 전체 기능 목록이 아닙니다. 각 항목의 출처 링크는 상세 패널에서 확인할 수 있습니다.</p>
+</footer>
+
+<script>
+const DATA = /*__TIMELINE__*/null;
+const KO = /*__INSIGHTS__*/null;
+
+const YEARS = [2021,2022,2023,2024,2025,2026];
+const TAGS = [
+  {k:"landmark", ko:"분기점"},
+  {k:"ai", ko:"AI · 에이전트"},
+  {k:"deprecation", ko:"폐기 · 강제변경"},
+  {k:"ma", ko:"인수"},
+  {k:"planned", ko:"계획"}
+];
+const state = { v:"all", tags:new Set(), q:"", sel:null };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yearOf = m => +m.date.slice(0,4);
+
+// -- stat bar --
+(function(){
+  const wd = DATA.milestones.filter(m=>m.v==="wd").length;
+  const sf = DATA.milestones.filter(m=>m.v==="sf").length;
+  const stats = [
+    [DATA.milestones.length, "수록 마일스톤"],
+    ["12", "반기 릴리스 웨이브"],
+    [DATA.skus.length, "기능영역 · SKU"],
+    [wd+" / "+sf, "Workday / SuccessFactors"],
+    [DATA.milestones.filter(m=>(m.tags||[]).includes("deprecation")).length, "폐기 · 강제변경"]
+  ];
+  document.getElementById("statbar").innerHTML = stats.map(s =>
+    '<div class="stat"><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></div>').join("");
+})();
+
+// -- release rhythm svg --
+(function(){
+  const W=1000, H=250, padL=52, padR=24, padT=34, padB=52;
+  const cols=12, cw=(W-padL-padR)/cols;
+  const laneWd=padT+38, laneSf=padT+108;
+  const waves=[];
+  YEARS.forEach((y,yi)=>{
+    [0,1].forEach(h=>{
+      const i=yi*2+h;
+      waves.push({i, lane:"wd", pos:0.42, exact:(y===2025||y===2026),
+        date: y===2026 ? (h? "9/19":"3/14") : (y===2025 ? (h?"9월":"3월") : null)});
+      waves.push({i, lane:"sf", pos:0.80, exact:(y===2026),
+        date: y===2026 ? (h? "11/13":"5/15") : null});
+    });
+  });
+  const x = w => padL + w.i*cw + w.pos*cw;
+  const todayX = padL + 11*cw + (2.5/6)*cw;
+  const L=(x1,y1,x2,y2,cls)=>'<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" class="'+cls+'"/>';
+  const T=(tx,ty,cls,anchor,txt)=>'<text x="'+tx+'" y="'+ty+'" class="'+cls+'" text-anchor="'+anchor+'">'+txt+'</text>';
+
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="2021년부터 2026년까지 반기별 두 벤더의 production 시점 비교. Workday는 각 반기 중반, SuccessFactors는 각 반기 말에 위치한다.">';
+  for(let i=0;i<=cols;i++) s+=L(padL+i*cw, padT-8, padL+i*cw, H-padB+8, 'grid-l');
+  YEARS.forEach((y,yi)=>{
+    s+=T(padL+(yi*2+1)*cw, H-padB+29, 'ax-year', 'middle', y);
+    ["1H","2H"].forEach((hl,h)=>{ s+=T(padL+(yi*2+h)*cw+cw/2, H-padB+12, 'ax-half', 'middle', hl); });
+  });
+  s+=L(padL, laneWd, W-padR, laneWd, 'rail-l');
+  s+=L(padL, laneSf, W-padR, laneSf, 'rail-l');
+  for(let i=0;i<cols;i++){
+    const a=waves.find(w=>w.i===i&&w.lane==="wd"), b=waves.find(w=>w.i===i&&w.lane==="sf");
+    s+=L(x(a), laneWd, x(b), laneSf, 'conn-l');
+  }
+  s+=L(todayX, padT-8, todayX, H-padB+8, 'today-l');
+  s+=T(todayX-7, padT-14, 'ax-today', 'end', '오늘 2026-09-16');
+  waves.forEach(w=>{
+    const y = w.lane==="wd" ? laneWd : laneSf;
+    s+='<circle cx="'+x(w)+'" cy="'+y+'" r="6" class="mk '+w.lane+(w.exact?'':' hollow')+'"/>';
+    if(w.date) s+=T(x(w), w.lane==="wd"? y-13 : y+21, 'dt '+w.lane, 'middle', w.date);
+  });
+  s+=T(padL, laneWd-22, 'lnt wd', 'start', 'WORKDAY · R1 / R2');
+  s+=T(padL, laneSf+40, 'lnt sf', 'start', 'SUCCESSFACTORS · 1H / 2H');
+  s+='</svg>';
+  document.getElementById("rhythmChart").innerHTML=s;
+})();
+
+// -- filter chips --
+document.getElementById("tagChips").innerHTML = TAGS.map(t =>
+  '<button type="button" class="chip" id="tag-'+t.k+'" data-tag="'+t.k+'" aria-pressed="false">'+esc(t.ko)+'</button>').join("");
+
+// -- matrix --
+function visible(m){
+  if(state.v!=="all" && m.v!==state.v) return false;
+  if(state.tags.size && !(m.tags||[]).some(t=>state.tags.has(t))) return false;
+  if(state.q){
+    const hay=(m.label+" "+m.ko+" "+m.en+" "+m.wave).toLowerCase();
+    if(!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+function renderMatrix(){
+  const shown = DATA.milestones.filter(visible);
+  document.getElementById("mcount").textContent = shown.length + " / " + DATA.milestones.length + " 항목";
+  let h = '<thead><tr><th scope="col">기능영역 · SKU</th>' +
+    YEARS.map(y=>'<th scope="col">'+y+'</th>').join("") + '</tr></thead><tbody>';
+  DATA.skus.forEach(sku=>{
+    const rowItems = shown.filter(m=>m.sku===sku.key);
+    h += '<tr'+(rowItems.length?'':' class="empty-row"')+'><th scope="row"><span class="ko">'+esc(sku.ko)+'</span><span class="en">'+esc(sku.en)+'</span></th>';
+    YEARS.forEach(y=>{
+      const cell = rowItems.filter(m=>yearOf(m)===y);
+      h += '<td>'+(cell.length? '<div class="cellwrap">'+cell.map(m=>{
+        const depr=(m.tags||[]).includes("deprecation")?" is-depr":"";
+        return '<button type="button" class="mchip '+m.v+depr+'" id="chip-'+m.id+'" data-id="'+m.id+'" aria-current="'+(state.sel===m.id)+'">'+
+          '<span class="w">'+esc(m.wave)+'</span>'+esc(m.label)+'</button>';
+      }).join("")+'</div>' : '')+'</td>';
+    });
+    h += '</tr>';
+  });
+  document.getElementById("matrixTable").innerHTML = h + '</tbody>';
+}
+function renderDetail(){
+  const box=document.getElementById("detail");
+  const m = DATA.milestones.find(x=>x.id===state.sel);
+  if(!m){ box.innerHTML='<div class="empty-detail">위 매트릭스에서 항목을 선택하면 영어 원문 · 한글 해설 · 출처가 여기에 표시됩니다.</div>'; return; }
+  const sku = DATA.skus.find(s=>s.key===m.sku);
+  const vname = m.v==="wd" ? "Workday" : "SAP SuccessFactors";
+  const skuName = m.v==="wd" ? sku.wd : sku.sf;
+  const tagKo = (m.tags||[]).map(t=>(TAGS.find(x=>x.k===t)||{ko:t}).ko);
+  box.innerHTML =
+    '<div class="detail-head">'+
+      '<span class="vtag '+m.v+'">'+esc(vname)+'</span>'+
+      '<strong style="font-size:15px">'+esc(m.label)+'</strong>'+
+      '<span class="mono" style="font-size:12px;color:var(--ink-3)">'+esc(m.wave)+' · '+esc(m.date)+'</span>'+
+      '<span class="tier">'+esc(m.tier)+'</span>'+
+      (tagKo.length? '<span class="mono" style="font-size:11px;color:var(--ink-3)">'+esc(tagKo.join(" · "))+'</span>':'')+
+    '</div>'+
+    '<div class="detail-body">'+
+      '<div class="dpane"><span class="eyebrow">English — source wording</span><p>'+esc(m.en)+'</p></div>'+
+      '<div class="dpane ko"><span class="eyebrow">한글 해설</span><p>'+m.ko+'</p></div>'+
+    '</div>'+
+    '<div class="detail-foot">'+
+      '<span><b>SKU</b> · '+esc(skuName)+'</span>'+
+      '<span><b>기능영역</b> · '+esc(sku.ko)+'</span>'+
+      '<span><b>출처</b> · <a href="'+esc(m.src)+'" target="_blank" rel="noopener">'+esc(m.srcName)+'</a></span>'+
+    '</div>';
+}
+function select(id){
+  state.sel = (state.sel===id)? null : id;
+  renderMatrix(); renderDetail();
+  if(state.sel){
+    const el=document.getElementById("chip-"+state.sel);
+    if(el) el.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
+  }
+}
+document.getElementById("matrixTable").addEventListener("click", e=>{
+  const b=e.target.closest(".mchip"); if(b) select(b.dataset.id);
+});
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  state.v=b.dataset.v;
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+  renderMatrix();
+}));
+document.getElementById("tagChips").addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  const t=b.dataset.tag;
+  if(state.tags.has(t)){ state.tags.delete(t); b.setAttribute("aria-pressed","false"); }
+  else { state.tags.add(t); b.setAttribute("aria-pressed","true"); }
+  renderMatrix();
+});
+document.getElementById("q").addEventListener("input", e=>{
+  state.q = e.target.value.trim().toLowerCase(); renderMatrix();
+});
+
+// -- insights --
+document.getElementById("insights-list").innerHTML = KO.insights.map(i=>{
+  const ev = i.evidence.map(id=>{
+    const m=DATA.milestones.find(x=>x.id===id);
+    return m? '<button type="button" class="evb '+m.v+'" data-go="'+m.id+'">'+esc(m.label)+'</button>' : '';
+  }).join("");
+  return '<article class="icard">'+
+    '<h3><span>'+String(i.n).padStart(2,"0")+'</span>'+esc(i.title)+'</h3>'+
+    '<p>'+i.body+'</p>'+
+    '<div class="sw"><em>So what</em>'+i.soWhat+'</div>'+
+    '<div class="ev"><span class="lbl">근거</span>'+ev+'</div>'+
+  '</article>';
+}).join("");
+document.getElementById("insights-list").addEventListener("click", e=>{
+  const b=e.target.closest("[data-go]"); if(!b) return;
+  state.v="all"; state.tags.clear(); state.q="";
+  document.getElementById("q").value="";
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", String(x.dataset.v==="all")));
+  document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+  state.sel=b.dataset.go;
+  renderMatrix(); renderDetail();
+  document.getElementById("matrix").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+// -- korean practice --
+document.getElementById("practice-list").innerHTML = KO.practice.map(p=>
+  '<div class="prow">'+
+    '<div class="ptitle"><h3>'+esc(p.theme)+'</h3><span class="en">'+esc(p.themeEn)+'</span></div>'+
+    '<div class="pcols">'+
+      '<div class="pcol b"><span class="ptag">Benefit · 적용 효과</span><p>'+p.benefit+'</p></div>'+
+      '<div class="pcol c"><span class="ptag">Consideration · 고려사항</span><p>'+p.consideration+'</p></div>'+
+    '</div>'+
+  '</div>').join("");
+
+// -- tier legend --
+document.getElementById("tierlist").innerHTML = Object.entries(DATA.meta.tierLegend)
+  .map(([k,v])=>'<li><span class="mono" style="color:var(--ink)">'+esc(k)+'</span> — '+esc(v)+'</li>').join("");
+
+renderMatrix();
+</script>

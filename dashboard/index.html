@@ -1,0 +1,481 @@
+<title>HCM Release Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F6; --surface:#FFFFFF; --surface-2:#E9EDEF; --surface-3:#DFE5E8;
+  --ink:#0E1619; --ink-2:#44565D; --ink-3:#73878F;
+  --line:#D2DADD; --line-soft:#E4E9EB;
+  --wd:#A85A1A; --sf:#1259A8;
+  --wd-fill:rgba(168,90,26,.11); --sf-fill:rgba(18,89,168,.10);
+  --good:#2F6B4F; --good-fill:rgba(47,107,79,.10);
+  --care:#9B3341; --care-fill:rgba(155,51,65,.09);
+  --crit:#A8261E;
+  --shadow:0 1px 2px rgba(14,22,25,.05), 0 8px 24px -12px rgba(14,22,25,.18);
+  --sans:"IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1113; --surface:#121A1D; --surface-2:#1A2429; --surface-3:#222E34;
+    --ink:#E6EDEF; --ink-2:#A6B7BD; --ink-3:#7A8D95;
+    --line:#27343A; --line-soft:#1D282D;
+    --wd:#C87E30; --sf:#4A8FE0;
+    --wd-fill:rgba(200,126,48,.15); --sf-fill:rgba(74,143,224,.14);
+    --good:#5FAF87; --good-fill:rgba(95,175,135,.13);
+    --care:#E08494; --care-fill:rgba(224,132,148,.12);
+    --crit:#E8756A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1113; --surface:#121A1D; --surface-2:#1A2429; --surface-3:#222E34;
+  --ink:#E6EDEF; --ink-2:#A6B7BD; --ink-3:#7A8D95;
+  --line:#27343A; --line-soft:#1D282D;
+  --wd:#C87E30; --sf:#4A8FE0;
+  --wd-fill:rgba(200,126,48,.15); --sf-fill:rgba(74,143,224,.14);
+  --good:#5FAF87; --good-fill:rgba(95,175,135,.13);
+  --care:#E08494; --care-fill:rgba(224,132,148,.12);
+  --crit:#E8756A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.62; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0}
+h1,h2,h3,h4{text-wrap:balance; margin:0; line-height:1.25; font-weight:600; letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--sf); text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--sf) 35%, transparent)}
+a:hover{border-bottom-color:var(--sf)}
+:focus-visible{outline:2px solid var(--sf); outline-offset:2px; border-radius:3px}
+.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:500}
+
+.mast{border-bottom:1px solid var(--line); background:var(--surface)}
+.mast-in{display:flex; flex-wrap:wrap; gap:20px 32px; align-items:flex-end; justify-content:space-between; padding-block:34px 26px}
+.mast h1{font-size:clamp(28px,4.4vw,42px); font-weight:700; letter-spacing:-.025em}
+.mast .sub{color:var(--ink-2); max-width:56ch; margin-top:10px; font-size:15px}
+.legend{display:flex; gap:18px; flex-wrap:wrap; align-items:center}
+.lg{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--ink-2)}
+.lg i{width:11px; height:11px; border-radius:2px; display:block}
+.lg.wd i{background:var(--wd)}
+.lg.sf i{background:var(--sf)}
+.statbar{display:flex; flex-wrap:wrap; border-top:1px solid var(--line-soft); margin-top:4px}
+.stat{padding:14px 26px 14px 0; margin-right:26px; border-right:1px solid var(--line-soft)}
+.stat:last-child{border-right:0; margin-right:0}
+.stat b{display:block; font-family:var(--mono); font-size:22px; font-weight:600; letter-spacing:-.02em}
+.stat span{font-size:12px; color:var(--ink-3)}
+
+section{padding-block:44px; border-bottom:1px solid var(--line-soft)}
+.shead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+.shead h2{font-size:22px}
+.shead .n{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500}
+.sdek{color:var(--ink-2); max-width:70ch; font-size:14.5px; margin-bottom:22px}
+
+.chartbox{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 16px 12px; overflow-x:auto}
+.chartbox svg{display:block; min-width:760px; width:100%; height:auto}
+#rhythmChart text{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.ax-year{fill:var(--ink); font-size:13px; font-weight:600}
+.ax-half{fill:var(--ink-3); font-size:10px; letter-spacing:.5px}
+.ax-today{fill:var(--ink-3); font-size:10.5px}
+.grid-l{stroke:var(--line-soft); stroke-width:1; fill:none}
+.rail-l{stroke:var(--line); stroke-width:1.5; fill:none}
+.conn-l{stroke:var(--line); stroke-width:1; stroke-dasharray:2 3; fill:none}
+.today-l{stroke:var(--ink-3); stroke-width:1.5; stroke-dasharray:4 3; fill:none}
+.mk{stroke-width:2}
+.mk.wd{stroke:var(--wd); fill:var(--wd)}
+.mk.sf{stroke:var(--sf); fill:var(--sf)}
+.mk.hollow{fill:var(--surface)}
+.dt{font-size:10px; font-weight:600}
+.dt.wd{fill:var(--wd)}
+.dt.sf{fill:var(--sf)}
+.lnt{font-size:11px; font-weight:600; letter-spacing:.6px}
+.lnt.wd{fill:var(--wd)}
+.lnt.sf{fill:var(--sf)}
+.finding{margin-top:16px; display:flex; gap:12px; align-items:flex-start; background:var(--surface-2); border-radius:8px; padding:14px 16px; font-size:14px; color:var(--ink-2)}
+.finding b{color:var(--ink)}
+.finding .k{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase; white-space:nowrap; padding-top:3px}
+
+.controls{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; margin-bottom:18px}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--surface)}
+.seg button{appearance:none; border:0; background:transparent; font:inherit; font-size:13px; color:var(--ink-2); padding:7px 13px; cursor:pointer; border-right:1px solid var(--line-soft)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--bg); font-weight:500}
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{appearance:none; font:inherit; font-size:12.5px; padding:5px 11px; border-radius:20px; border:1px solid var(--line); background:var(--surface); color:var(--ink-2); cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+input[type="search"]{font:inherit; font-size:13px; padding:7px 11px; border-radius:7px; border:1px solid var(--line); background:var(--surface); color:var(--ink); min-width:190px; max-width:100%}
+.count{font-family:var(--mono); font-size:12px; color:var(--ink-3)}
+
+.matrix-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface)}
+table.matrix{border-collapse:collapse; width:100%; min-width:940px}
+table.matrix th, table.matrix td{border-bottom:1px solid var(--line-soft); border-right:1px solid var(--line-soft); vertical-align:top; text-align:left}
+table.matrix thead th{position:sticky; top:0; background:var(--surface-2); z-index:2; padding:9px 12px; font-family:var(--mono); font-size:12px; font-weight:600; color:var(--ink-2); letter-spacing:.04em}
+table.matrix thead th:first-child{z-index:3}
+table.matrix tbody th{padding:12px; width:186px; min-width:186px; background:var(--surface); position:sticky; left:0; z-index:1; font-weight:500}
+table.matrix tbody th .ko{font-size:13.5px; display:block}
+table.matrix tbody th .en{font-family:var(--mono); font-size:10.5px; color:var(--ink-3); letter-spacing:.05em; text-transform:uppercase}
+table.matrix td{padding:7px; min-width:124px}
+table.matrix tr.empty-row{display:none}
+.cellwrap{display:flex; flex-direction:column; gap:5px}
+.mchip{appearance:none; font:inherit; text-align:left; width:100%; cursor:pointer; font-size:12px; line-height:1.35; padding:6px 8px 6px 9px; border-radius:5px; border:1px solid var(--line); background:var(--surface); border-left-width:3px; color:var(--ink); transition:background .12s ease}
+.mchip:hover{background:var(--surface-2)}
+.mchip.wd{border-left-color:var(--wd)}
+.mchip.sf{border-left-color:var(--sf)}
+.mchip.is-depr{border-left-color:var(--crit)}
+.mchip[aria-current="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+.mchip .w{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; opacity:.62; margin-bottom:1px}
+
+.detail{margin-top:18px; border:1px solid var(--line); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden}
+.detail-head{padding:16px 20px 12px; border-bottom:1px solid var(--line-soft); display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center}
+.vtag{font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.06em; padding:3px 9px; border-radius:4px}
+.vtag.wd{background:var(--wd-fill); color:var(--wd)}
+.vtag.sf{background:var(--sf-fill); color:var(--sf)}
+.tier{font-family:var(--mono); font-size:11px; color:var(--ink-3); border:1px solid var(--line); border-radius:4px; padding:2px 7px}
+.detail-body{display:grid; grid-template-columns:1fr 1fr}
+.dpane{padding:18px 20px}
+.dpane+.dpane{border-left:1px solid var(--line-soft)}
+.dpane .eyebrow{margin-bottom:8px; display:block}
+.dpane p{font-size:14px; color:var(--ink-2)}
+.dpane.ko p{color:var(--ink)}
+.detail-foot{padding:12px 20px 16px; border-top:1px solid var(--line-soft); font-size:12.5px; color:var(--ink-3); display:flex; flex-wrap:wrap; gap:6px 16px}
+.detail-foot b{color:var(--ink-2)}
+.empty-detail{padding:26px 20px; color:var(--ink-3); font-size:14px}
+
+.ins{display:grid; gap:14px}
+.icard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 22px}
+.icard h3{font-size:17px; margin-bottom:10px; display:flex; gap:12px; align-items:baseline}
+.icard h3 span{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500; flex:none}
+.icard p{font-size:14px; color:var(--ink-2)}
+.icard .sw{margin-top:12px; padding:12px 14px; border-radius:7px; background:var(--surface-2); font-size:14px; color:var(--ink)}
+.icard .sw em{font-style:normal; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:4px}
+.ev{margin-top:12px; display:flex; flex-wrap:wrap; gap:5px; align-items:center}
+.ev .lbl{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); margin-right:3px}
+.evb{appearance:none; font:inherit; font-family:var(--mono); font-size:11px; padding:3px 8px; border-radius:4px; border:1px solid var(--line); background:var(--surface-2); color:var(--ink-2); cursor:pointer}
+.evb:hover{background:var(--surface-3)}
+.evb.wd{border-left:2px solid var(--wd)}
+.evb.sf{border-left:2px solid var(--sf)}
+
+.prow{background:var(--surface); border:1px solid var(--line); border-radius:10px; margin-bottom:12px; overflow:hidden}
+.ptitle{padding:14px 20px; border-bottom:1px solid var(--line-soft); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; background:var(--surface-2)}
+.ptitle h3{font-size:16px}
+.ptitle .en{font-family:var(--mono); font-size:11px; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase}
+.pcols{display:grid; grid-template-columns:1fr 1fr}
+.pcol{padding:16px 20px 18px}
+.pcol+.pcol{border-left:1px solid var(--line-soft)}
+.ptag{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-family:var(--mono); letter-spacing:.06em; text-transform:uppercase; font-weight:600; padding:3px 9px; border-radius:4px; margin-bottom:9px}
+.pcol.b .ptag{background:var(--good-fill); color:var(--good)}
+.pcol.c .ptag{background:var(--care-fill); color:var(--care)}
+.pcol p{font-size:14px; color:var(--ink-2)}
+.pcol b{color:var(--ink); font-weight:600}
+
+.mgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+.mcard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px}
+.mcard h4{font-size:14px; margin-bottom:8px}
+.mcard p, .mcard li{font-size:13px; color:var(--ink-2)}
+.mcard ul{margin:0; padding-left:18px}
+.mcard li{margin-bottom:5px}
+.warn{border-left:3px solid var(--care)}
+footer{padding-block:28px 40px; color:var(--ink-3); font-size:12.5px}
+
+@media (max-width:760px){
+  .detail-body, .pcols{grid-template-columns:1fr}
+  .dpane+.dpane, .pcol+.pcol{border-left:0; border-top:1px solid var(--line-soft)}
+  .stat{padding-right:18px; margin-right:18px}
+  section{padding-block:34px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-in">
+      <div>
+        <p class="eyebrow">2021 – 2026 · 릴리스 아틀라스</p>
+        <h1>Workday HCM &amp; SAP SuccessFactors</h1>
+        <p class="sub">6년치 반기 릴리스와 개발 로드맵을 SKU·기능영역 축으로 정렬하고, 한국 기업 HR Practice 관점의 적용 Benefit과 Consideration을 붙였습니다.</p>
+      </div>
+      <div class="legend">
+        <span class="lg wd"><i></i> Workday HCM</span>
+        <span class="lg sf"><i></i> SAP SuccessFactors</span>
+      </div>
+    </div>
+    <div class="statbar" id="statbar"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="rhythm">
+    <div class="shead"><span class="n">01</span><h2>릴리스 리듬 — 두 벤더는 항상 어긋난다</h2></div>
+    <p class="sdek">가로축은 2021년 상반기부터 2026년 하반기까지 12개 반기입니다. 각 반기 안에서 두 벤더의 production 시점이 어디에 놓이는지를 표시했습니다. <b>속이 찬 표식</b>은 본 데이터셋에서 일자가 확인된 릴리스, <b>속이 빈 표식</b>은 반기만 확인되고 정확한 일자는 미확인인 릴리스입니다.</p>
+    <div class="chartbox"><div id="rhythmChart"></div></div>
+    <div class="finding">
+      <span class="k">읽는 법</span>
+      <p><b>Workday는 각 반기의 가운데(3월·9월), SAP는 각 반기의 끝(5월·11월)에 production을 둡니다.</b> 2026년 확인 일자 기준으로 간격은 정확히 두 달입니다 — 3/14 → 5/15, 9/19 → 11/13. 두 제품을 함께 쓰는 조직에게 이것은 "연 2회 릴리스 대응"이 아니라 <b>연 4회의 검증 창</b>을 뜻합니다.</p>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="shead"><span class="n">02</span><h2>시점 × SKU 매트릭스</h2><span class="count" id="mcount"></span></div>
+    <p class="sdek">행은 기능영역(SKU), 열은 연도입니다. 항목을 누르면 영어 원문과 한글 해설, 출처가 아래에 열립니다. 수록 기준은 <b>구조나 전략을 바꾼 변화</b>이며, 벤더가 반기마다 내놓는 250여 건의 전체 기능 목록이 아닙니다.</p>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="벤더 필터">
+        <button type="button" id="v-all" data-v="all" aria-pressed="true">전체</button>
+        <button type="button" id="v-wd" data-v="wd" aria-pressed="false">Workday</button>
+        <button type="button" id="v-sf" data-v="sf" aria-pressed="false">SuccessFactors</button>
+      </div>
+      <div class="chips" id="tagChips"></div>
+      <input type="search" id="q" placeholder="키워드 검색 (예: Joule, 스킬, 폐기)" aria-label="키워드 검색">
+    </div>
+    <div class="matrix-scroll"><table class="matrix" id="matrixTable"></table></div>
+    <div class="detail" id="detail"><div class="empty-detail">위 매트릭스에서 항목을 선택하면 영어 원문 · 한글 해설 · 출처가 여기에 표시됩니다.</div></div>
+  </section>
+
+  <section id="insights">
+    <div class="shead"><span class="n">03</span><h2>6년 이력에서 도출한 인사이트</h2></div>
+    <p class="sdek">각 인사이트의 <span class="mono">근거</span> 표식을 누르면 해당 마일스톤이 매트릭스에서 열립니다. 결론은 컨설턴트 해석이며, 벤더의 주장이 아닙니다.</p>
+    <div class="ins" id="insights-list"></div>
+  </section>
+
+  <section id="practice">
+    <div class="shead"><span class="n">04</span><h2>한국 HR Practice 적용 — Benefit &amp; Consideration</h2></div>
+    <p class="sdek">국내 기업의 인사 제도·노무 관행·법령 환경에 비추어 정리했습니다. 법령 언급은 검토가 필요한 지점을 가리키는 것이며, 법률 자문이 아닙니다.</p>
+    <div id="practice-list"></div>
+  </section>
+
+  <section id="method">
+    <div class="shead"><span class="n">05</span><h2>방법론과 한계</h2></div>
+    <div class="mgrid">
+      <div class="mcard">
+        <h4>출처 등급</h4>
+        <ul id="tierlist"></ul>
+      </div>
+      <div class="mcard warn">
+        <h4>문서 접근성 비대칭 — 반드시 감안할 것</h4>
+        <p>Workday는 기능 단위 릴리스 노트를 <b>Community 로그인 고객에게만</b> 공개하고, SAP는 What's New Viewer를 <b>공개</b>합니다. 그 결과 어느 반기든 공개 기록의 깊이는 SAP 쪽이 항상 더 깊습니다. 이 대시보드에서 Workday 항목 수가 적은 것은 <b>문서 정책의 산물이지 릴리스 내용의 빈약함이 아닙니다.</b> 항목 수를 벤더의 출시량으로 읽지 마십시오.</p>
+      </div>
+      <div class="mcard warn">
+        <h4>수집 환경 제약</h4>
+        <p>본 데이터는 벤더 도메인 직접 열람이 차단된 환경에서 수집되어, <span class="mono">T1</span> 근거 일부가 <span class="mono">T1*</span>(벤더 페이지를 지목했으나 검색 요약으로 읽음)로 강등되어 있습니다. 고객 배포용 자료에 인용하기 전 원문 URL을 직접 확인하십시오.</p>
+      </div>
+      <div class="mcard">
+        <h4>남은 공백</h4>
+        <ul>
+          <li>Workday 2022R1 · 2026R2의 기능 단위 목록 (Community 로그인 필요)</li>
+          <li>SAP 2H 2026 기능 목록 — 2026-10-12 preview 이후 갱신 대상</li>
+          <li>ECP 지원 국가 총수 — 출처가 50 / 53 / 60으로 충돌 (한국 포함은 일치)</li>
+          <li>SAP 측 AI 과금 구조 — Workday Flex Credits와의 TCO 대칭 비교 불가</li>
+          <li>Workday Recruiting Agent의 70% · 55% 수치 산출 근거</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>HCM Release Atlas · 데이터 기준일 <span class="mono">2026-09-16</span> · 마일스톤은 선별 수록이며 전체 기능 목록이 아닙니다. 각 항목의 출처 링크는 상세 패널에서 확인할 수 있습니다.</p>
+</footer>
+
+<script>
+const DATA = {"meta":{"version":"1.0","compiled":"2026-09-16","window":"2021-01 – 2026-11","note":"Curated milestone set, not an exhaustive feature list. Vendors ship 250+ items per wave; this records structural or strategy-bearing changes only. Milestone counts are a property of this curation and must never be read as vendor output volume.","tierLegend":{"T1":"Vendor-authored, publicly addressable","T1*":"Vendor-authored page cited, but read via search summary (egress-blocked); verify original before client use","T2":"Implementation partner / SI","T3":"Media, analyst, or community-member post"}},"skus":[{"key":"core","ko":"핵심 인사","en":"Core HR","wd":"Workday HCM (Core HCM)","sf":"Employee Central"},{"key":"payroll","ko":"급여","en":"Payroll","wd":"Workday Payroll · Strada · Global Payroll Cloud","sf":"Employee Central Payroll"},{"key":"time","ko":"근태·부재","en":"Time & Absence","wd":"Time Tracking · Absence · Scheduling","sf":"Time Management"},{"key":"recruiting","ko":"채용","en":"Recruiting","wd":"Workday Recruiting (+HiredScore) · VNDLY","sf":"SF Recruiting → SmartRecruiters"},{"key":"onboarding","ko":"온보딩","en":"Onboarding","wd":"Workday Onboarding (번들 내)","sf":"SF Onboarding (별도 SKU)"},{"key":"learning","ko":"학습","en":"Learning","wd":"Workday Learning (+Sana)","sf":"SF Learning (LMS)"},{"key":"perf","ko":"성과·목표","en":"Performance & Goals","wd":"Talent & Performance (번들 내)","sf":"SF Performance & Goals (별도 SKU)"},{"key":"succession","ko":"승계·경력개발","en":"Succession & Career","wd":"Succession · Career Hub · Talent Marketplace","sf":"Career & Talent Development · Opportunity Marketplace"},{"key":"skills","ko":"스킬","en":"Skills","wd":"Workday Skills Cloud","sf":"Talent Intelligence Hub"},{"key":"comp","ko":"보상","en":"Compensation","wd":"Compensation · Advanced Compensation (번들 내)","sf":"SF Compensation · Variable Pay (각 별도 SKU)"},{"key":"analytics","ko":"인력분석","en":"Analytics","wd":"People Analytics · Prism · Adaptive Planning · Peakon","sf":"People Analytics · People Intelligence (BDC)"},{"key":"ex","ko":"직원경험·HR서비스","en":"EX / HR Service","wd":"Workday Help · Journeys · Assistant · Everywhere","sf":"Work Zone · HR Service Delivery"},{"key":"ai","ko":"AI 에이전트","en":"AI & Agents","wd":"Workday Illuminate · Agent System of Record · Build","sf":"Joule · Joule Agents"},{"key":"platform","ko":"확장·통합","en":"Platform","wd":"Workday Extend · Integrations · Marketplace","sf":"SAP BTP · Extension Center · SAP Store"}],"milestones":[{"id":"sf-01","v":"sf","wave":"Launch","date":"2021-01","sku":"time","tags":["launch"],"tier":"T3","en":"SAP SuccessFactors Time Tracking launched (January 2021). By 2025 more than 1,000 organisations worldwide had chosen it.","ko":"SuccessFactors Time Tracking 제품 출시. 2025년 기준 전 세계 1,000개 이상 기업이 채택한 것으로 보고됨.","src":"https://sapinsider.org/expert-insights/looking-at-the-growth-of-sap-successfactors-time-management","srcName":"SAPinsider","label":"Time Tracking 출시"},{"id":"sf-02","v":"sf","wave":"2H 2021","date":"2021-11","sku":"succession","tags":["landmark"],"tier":"T1","en":"Opportunity Marketplace became generally available as part of the 2H 2021 release. It surfaces jobs, assignments, mentoring and peer connections in one place, taking into account the individual's whole self — skills and competencies plus capabilities, interests, work styles and learning preferences.","ko":"Opportunity Marketplace GA. 직무·과제·멘토링·동료 연결을 한 곳에서 추천하며, 스킬·역량뿐 아니라 관심사·업무 스타일·학습 선호까지 고려하는 설계. 업계에서 '10년 만의 최대 릴리스'로 평가받음.","src":"https://news.sap.com/2021/10/sap-successfactors-opportunity-marketplace-drives-internal-mobility-and-upskilling-to-help-organizations-future-proof-their-business/","srcName":"SAP News Center","label":"Opportunity Marketplace GA"},{"id":"sf-03","v":"sf","wave":"2H 2021","date":"2021-11","sku":"core","tags":[],"tier":"T1","en":"Dynamic Teams: an informal team not defined by the formal organisational hierarchy and reporting structure, formed by people coming together for a specific purpose.","ko":"Dynamic Teams 도입. 공식 조직도·보고체계와 무관하게 목적 중심으로 구성·해체되는 비공식 팀을 시스템에 표현.","src":"https://help.sap.com/docs/successfactors-platform/implementing-dynamic-teams/dynamic-teams","srcName":"SAP Help Portal","label":"Dynamic Teams"},{"id":"sf-04","v":"sf","wave":"2H 2021","date":"2021-11","sku":"ex","tags":[],"tier":"T1","en":"Mobile app shipped a reimagined Home Page experience covering workflow management, team experience and time management, plus the initial Opportunity Marketplace release on mobile.","ko":"모바일 앱 홈 화면 재설계 — 워크플로 관리·팀 경험·근태를 모바일에서 처리. Opportunity Marketplace 모바일 초기 버전 포함.","src":"https://blogs.sap.com/2021/11/18/second-half-2021-sap-successfactors-mobile-app-release-highlights/","srcName":"SAP Blogs","label":"모바일 홈 재설계"},{"id":"sf-05","v":"sf","wave":"1H 2022","date":"2022-05","sku":"core","tags":[],"tier":"T1","en":"Enhanced home page alerts let users see urgent pending Employee Central tasks without leaving the home page; dedicated onboarding/offboarding to-dos organised by priority.","ko":"홈 화면에서 벗어나지 않고 EC 긴급 미결 업무를 확인. 온보딩/오프보딩 To-Do를 우선순위로 정렬해 제공.","src":"https://blogs.sap.com/2022/04/18/first-half-1h-2022-sap-successfactors-release-highlights-are-here/","srcName":"SAP Blogs","label":"홈 긴급업무 알림"},{"id":"sf-06","v":"sf","wave":"1H 2022","date":"2022-05","sku":"learning","tags":[],"tier":"T1","en":"LMS Course Home enhanced to improve discoverability and encourage course completion.","ko":"LMS Course Home 개선 — 과정 탐색성과 수료율 제고 목적.","src":"https://blogs.sap.com/2022/04/21/sap-successfactors-lms-1h-2022-release-highlights/","srcName":"SAP Blogs","label":"LMS Course Home"},{"id":"sf-07","v":"sf","wave":"2H 2022","date":"2022-11","sku":"core","tags":[],"tier":"T1","en":"Employee Central now supports 30 alternative cost centres per employee, up from the previous limit of 12. UI cleanup removed MDF-based foundation objects from the Manage Organization, Pay and Job Structures UI.","ko":"직원당 대체 코스트센터 한도를 12개에서 30개로 확대. 조직·급여·직무 구조 관리 UI에서 MDF 기반 파운데이션 오브젝트 정리.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/sap-successfactors-employee-central-2h-2022-release-highlights/ba-p/13558550","srcName":"SAP Community","label":"대체 코스트센터 30개"},{"id":"sf-08","v":"sf","wave":"2H 2022","date":"2022-11","sku":"platform","tags":["landmark"],"tier":"T1","en":"New cross-system workflow feature providing end-to-end workflows between cloud and on-premise solutions, streamlining HR processes such as new hire or change of working time.","ko":"클라우드–온프레미스 간 엔드투엔드 워크플로 제공. 신규 입사, 근로시간 변경 등 하이브리드 환경의 인사 프로세스를 단절 없이 연결.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/sap-successfactors-employee-central-2h-2022-release-highlights/ba-p/13558550","srcName":"SAP Community","label":"클라우드–온프레미스 워크플로"},{"id":"sf-09","v":"sf","wave":"2H 2022","date":"2022-11","sku":"onboarding","tags":[],"tier":"T1","en":"Onboarding Dashboard enhanced with new UI elements: view contact details of new hires and hiring managers, scan tasks and take actions directly from the dashboard.","ko":"온보딩 대시보드 개선 — 신규 입사자·현업 관리자 연락처 조회, 대시보드에서 직접 업무 확인 및 처리.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/sap-successfactors-onboarding-2h-2022-release-highlights/ba-p/13560193","srcName":"SAP Community","label":"온보딩 대시보드"},{"id":"sf-10","v":"sf","wave":"2H 2023","date":"2023-11","sku":"skills","tags":["landmark"],"tier":"T1","en":"Talent Intelligence Hub moved to General Availability — an AI-powered skills framework built into the HXM Suite intended to drive the organisation's entire learning and talent strategy.","ko":"Talent Intelligence Hub GA. 스위트에 내장된 AI 기반 스킬 프레임워크로, 학습·인재 전략 전반의 기준 체계 역할을 목표로 함. SAP 스킬 전략의 기점.","src":"https://news.sap.com/2023/10/new-sap-successfactors-ai-innovations-successconnect/","srcName":"SAP News Center","label":"Talent Intelligence Hub GA"},{"id":"sf-11","v":"sf","wave":"2H 2023","date":"2023-11","sku":"ai","tags":["landmark","ai"],"tier":"T1","en":"Joule, SAP's natural-language generative AI copilot, became generally available with SAP SuccessFactors as part of the 2H 2023 release — finding information, answering questions, and completing HR tasks such as approving time-off or changing personal data.","ko":"자연어 생성형 AI 코파일럿 Joule이 SuccessFactors와 함께 GA. 정보 조회·질의응답에 더해 휴가 승인, 개인정보 변경 등 실제 인사 업무 처리까지 대화로 수행.","src":"https://news.sap.com/2023/10/sap-successfactors-second-half-2023-release/","srcName":"SAP News Center","label":"Joule GA"},{"id":"sf-12","v":"sf","wave":"2H 2023","date":"2023-11","sku":"recruiting","tags":["ai"],"tier":"T1","en":"Recruiters and hiring managers can use generative AI to create tailored job descriptions based on data from within SAP SuccessFactors as well as external sources.","ko":"생성형 AI 기반 채용 공고문(직무기술서) 자동 작성. 내부 데이터와 외부 소스를 함께 활용.","src":"https://news.sap.com/2023/10/new-ai-sap-successfactors-capabilities-ignite-potential/","srcName":"SAP News Center","label":"GenAI 직무기술서"},{"id":"sf-13","v":"sf","wave":"1H 2024","date":"2024-05","sku":"skills","tags":[],"tier":"T2","en":"Growth Portfolio landing page and attribute details page redesigned: a Skills and Attributes section with a card per attribute type, a Roles and Aspirations section for current and target job roles, and an Opportunities to Grow section recommending learning, open jobs and mentoring.","ko":"Growth Portfolio 재설계 — 속성 유형별 카드(Skills and Attributes), 현재·목표 직무(Roles and Aspirations), 학습·공고·멘토링 추천(Opportunities to Grow)의 3구획 구성. 개인 단위 스킬 화면의 표준형이 자리잡음.","src":"https://www.rizing.com/blogs/sap-successfactors-1h-2024-release-analysis-talent-intelligence","srcName":"Rizing","label":"Growth Portfolio 재설계"},{"id":"sf-14","v":"sf","wave":"1H 2024","date":"2024-05","sku":"skills","tags":["ai"],"tier":"T2","en":"AI-Assisted Skills architecture creation: build skills attribute libraries by extracting skills from Job Profiles in Job Profile Builder.","ko":"AI 보조 스킬 아키텍처 생성 — Job Profile Builder의 직무 프로파일에서 스킬을 추출해 속성 라이브러리를 구축. 스킬 체계 초기 구축 공수를 줄이는 방향.","src":"https://www.rizing.com/blogs/sap-successfactors-1h-2024-release-analysis-talent-intelligence","srcName":"Rizing","label":"AI 스킬 아키텍처"},{"id":"sf-15","v":"sf","wave":"2H 2024","date":"2024-11","sku":"succession","tags":["landmark"],"tier":"T1","en":"Career and Talent Development introduced — a fully integrated solution bringing together SAP SuccessFactors Succession & Development and SAP SuccessFactors Opportunity Marketplace.","ko":"Career and Talent Development 출시 — Succession & Development와 Opportunity Marketplace를 하나의 통합 솔루션으로 결합. SKU 구조가 재편된 사례.","src":"https://news.sap.com/2024/10/new-ai-sap-successfactors-hcm-suite-workforce-management-upskilling-organizational-evolution/","srcName":"SAP News Center","label":"Career & Talent Development"},{"id":"sf-16","v":"sf","wave":"2H 2024","date":"2024-11","sku":"ai","tags":["ai"],"tier":"T3","en":"The 2H 2024 release introduced over 250 innovative features and enhancements, along with over 30 new purpose-built AI capabilities. AI-driven chat integration with Microsoft Teams was added.","ko":"250개 이상 기능·개선과 30개 이상의 목적특화 AI 기능을 포함. Microsoft Teams 기반 AI 채팅 연동 추가.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/2h-2024-release-highlights-unlocking-the-power-of-ai-in-sap-successfactors/ba-p/13889340","srcName":"SAP Community","label":"목적특화 AI 30종+"},{"id":"sf-17","v":"sf","wave":"2H 2024","date":"2024-11","sku":"skills","tags":[],"tier":"T1","en":"First partners to integrate with the talent intelligence hub announced: Beamery, Degreed, iMocha, Korn Ferry, Lightcast, Phenom, TalenTeam and TechWolf.","ko":"TIH 파트너 생태계 개방 — Beamery, Degreed, iMocha, Korn Ferry, Lightcast, Phenom, TalenTeam, TechWolf가 1차 연동 파트너로 발표됨. 스킬 체계를 외부 택소노미와 연결하는 경로가 열림.","src":"https://news.sap.com/2024/10/new-ai-sap-successfactors-hcm-suite-workforce-management-upskilling-organizational-evolution/","srcName":"SAP News Center","label":"TIH 파트너 개방"},{"id":"sf-18","v":"sf","wave":"2H 2024","date":"2024-11","sku":"learning","tags":["ai"],"tier":"T1","en":"AI-assisted skills identification helps learning administrators maintain skills-based attributes by extracting skills from course descriptions and automatically linking them to the corresponding learning.","ko":"과정 설명문에서 스킬을 추출해 해당 학습과 자동 연결. 학습 관리자가 스킬–과정 매핑을 수작업으로 유지하지 않아도 되는 방향.","src":"https://news.sap.com/2024/10/new-ai-sap-successfactors-hcm-suite-workforce-management-upskilling-organizational-evolution/","srcName":"SAP News Center","label":"과정→스킬 자동 연결"},{"id":"sf-19","v":"sf","wave":"1H 2025","date":"2025-05","sku":"perf","tags":["ai"],"tier":"T1","en":"New Performance & Goals interface enhances performance tasks with contextual information and AI-assisted features, including comment suggestions, performance insights for managers, and sentiment analysis for 360-degree reviews.","ko":"성과·목표 신규 인터페이스 — 맥락 정보 제공과 함께 코멘트 제안, 관리자용 성과 인사이트, 360 리뷰 감성 분석 등 AI 보조 기능 탑재.","src":"https://news.sap.com/2025/04/sap-successfactors-1h-2025-release-new-ai-enabled-innovations/","srcName":"SAP News Center","label":"성과·목표 신규 UI"},{"id":"sf-20","v":"sf","wave":"1H 2025","date":"2025-05","sku":"ai","tags":["ai"],"tier":"T2","en":"Joule's generative AI toolkit expanded with interview feedback insights, performance review insights, successor insights, 360° review sentiment analysis, and AI-powered suggestions for goal setting.","ko":"Joule 생성형 AI 범위 확대 — 면접 피드백 인사이트, 성과 리뷰 인사이트, 후계자 인사이트, 360 감성 분석, 목표 설정 제안. AI가 '조회'에서 '판단 보조'로 이동한 구간.","src":"https://www.clarity-solutions.de/en/insight/sap-successfactors-1h-2025-release-business-ai","srcName":"Clarity Solutions","label":"Joule 인사이트 확대"},{"id":"sf-21","v":"sf","wave":"2H 2025","date":"2025-11","sku":"analytics","tags":["landmark"],"tier":"T1","en":"People Intelligence in SAP Business Data Cloud became generally available, designed to help organisations make better workforce decisions.","ko":"SAP Business Data Cloud 기반 People Intelligence GA. 인력 데이터 분석 기반이 SuccessFactors 내부에서 BDC 레이어로 확장된 전환점.","src":"https://news.sap.com/2025/10/sap-successfactors-2h-2025-release-ai-skills-people-insights/","srcName":"SAP News Center","label":"People Intelligence GA"},{"id":"sf-22","v":"sf","wave":"2H 2025","date":"2025-11","sku":"ai","tags":["ai"],"tier":"T1","en":"The Performance and Goals Agent became available — the first of the module-embedded agents.","ko":"Performance and Goals Agent 제공 개시. 모듈 내장형 에이전트의 첫 사례.","src":"https://news.sap.com/2025/10/sap-successfactors-2h-2025-release-ai-skills-people-insights/","srcName":"SAP News Center","label":"성과·목표 에이전트"},{"id":"sf-23","v":"sf","wave":"2H 2025","date":"2025-11","sku":"succession","tags":["ai"],"tier":"T1","en":"AI now recommends successors based on skills, competencies and experience — not just seniority.","ko":"후계자 추천이 연공이 아니라 스킬·역량·경험 기반으로 이동. 연공 중심 승계 관행을 쓰는 조직에는 제도적 함의가 큰 변화.","src":"https://news.sap.com/2025/10/sap-successfactors-2h-2025-release-ai-skills-people-insights/","srcName":"SAP News Center","label":"스킬 기반 후계자 추천"},{"id":"sf-24","v":"sf","wave":"2H 2025","date":"2025-11","sku":"core","tags":[],"tier":"T2","en":"The latest People Profile entered full rollout. Across Employee Central, Time and Benefits, SAP introduced tighter validations, better error handling and enhanced rule contexts.","ko":"최신 People Profile 전면 적용 시작. EC·Time·Benefits 전반에 검증 강화, 오류 처리 개선, 룰 컨텍스트 확장.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/sap-successfactors-2h-2025-release-what-s-new-amp-what-matters/ba-p/14242811","srcName":"SAP Community","label":"최신 People Profile 전면"},{"id":"sf-25","v":"sf","wave":"M&A","date":"2025-09","sku":"recruiting","tags":["landmark","ma"],"tier":"T1","en":"SAP completed its acquisition of SmartRecruiters on 11 September 2025. SmartRecruiters continues to operate as a standalone recruiting solution, fully interoperable with SuccessFactors and other HCM systems.","ko":"SAP, SmartRecruiters 인수 완료(2025-09-11). SmartRecruiters는 독립 솔루션으로도 계속 운영되며 SuccessFactors 및 타 HCM과 상호운용. 이후 SF Recruiting의 혁신 경로가 SmartRecruiters로 이동.","src":"https://news.sap.com/2025/09/sap-completes-smartrecruiters-acquisition/","srcName":"SAP News Center","label":"SmartRecruiters 인수 완료"},{"id":"sf-26","v":"sf","wave":"1H 2026","date":"2026-05","sku":"ai","tags":["landmark","ai"],"tier":"T1*","en":"Four Joule agents reached GA: Career & Talent Development, HR Service, People Intelligence and Payroll. Agentic functions rolled out across recruiting, personnel administration, payroll, learning and talent development. Joule respects role-based permissions and cannot return data a user should not see.","ko":"Joule 에이전트 4종 GA — 경력·인재개발, HR 서비스, People Intelligence, 급여. 채용·인사운영·급여·학습·인재개발 전반으로 agentic 기능 확산. Joule은 RBP 권한을 상속하므로 사용자가 볼 수 없는 데이터는 질의해도 반환하지 않음.","src":"https://news.sap.com/2026/04/sap-successfactors-1h-2026-release/","srcName":"SAP News Center","label":"Joule 에이전트 4종 GA"},{"id":"sf-27","v":"sf","wave":"1H 2026","date":"2026-05","sku":"skills","tags":["landmark"],"tier":"T1*","en":"A dedicated Skills Governance process provides a central staging area where imported and AI-inferred skills can be reviewed, standardised and approved before being added to the Attributes Library. New central certificate management covers attachment requirements, expiry and renewal rules, and notification settings.","ko":"스킬 거버넌스 — 임포트 및 AI 추론 스킬을 Attributes Library 등재 전에 검토·표준화·승인하는 중앙 스테이징 영역 제공. 자격증 중앙 관리(첨부 요건·만료·갱신 규칙·알림) 신설. 'AI가 만든 데이터도 승인을 거친다'는 설계 원칙이 기능으로 구현됨.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-members/sap-successfactors-1h-2026-the-skills-based-organisation-finally-grows-up/ba-p/14380910","srcName":"SAP Community","label":"Skills Governance"},{"id":"sf-28","v":"sf","wave":"1H 2026","date":"2026-05","sku":"comp","tags":[],"tier":"T1*","en":"Variable Pay now supports more advanced custom formulas, including conditional IF-THEN logic and nested conditions, enabling multiple calculation rules within a single template. The redesigned History and Editing UI in Full Profile expanded to Compensation Information.","ko":"Variable Pay가 조건부 IF-THEN 및 중첩 조건을 지원해 단일 템플릿 안에 복수 산정 규칙 수용 가능. Full Profile의 재설계된 이력·편집 UI가 보상 정보로 확대.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/first-half-2026-release-what-s-new-in-sap-successfactors-compensation/ba-p/14378821","srcName":"SAP Community (by SAP)","label":"Variable Pay 중첩 조건식"},{"id":"sf-29","v":"sf","wave":"1H 2026","date":"2026-05","sku":"ex","tags":[],"tier":"T1*","en":"A new guided experience for marital status changes breaks a complex process into clear, interactive steps, weaving together data from both SAP and non-SAP systems in a single flow.","ko":"결혼 상태 변경에 대한 가이디드 경험 — 복잡한 절차를 단계로 분해하고, SAP·비SAP 시스템 데이터를 하나의 흐름으로 결합. '생활 사건 1건 → 여러 시스템 갱신' 패턴의 첫 구현.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/what-s-new-in-sap-successfactors-work-zone-1h-2026-release-highlights/ba-p/14391769","srcName":"SAP Community (by SAP)","label":"Work Zone 가이디드 경험"},{"id":"sf-30","v":"sf","wave":"1H 2026","date":"2026-05","sku":"recruiting","tags":[],"tier":"T1*","en":"Support for integration with SmartRecruiters Winston, allowing AI chat to be embedded directly into SAP SuccessFactors career sites using Career Site Builder. Clearer visibility of pending interview feedback, filters for active applicants only, earlier detection of missing information in draft offer letters.","ko":"SmartRecruiters Winston 연동 — Career Site Builder로 SF 커리어 사이트에 AI 챗 직접 임베드. 면접 피드백 미결 가시성, 활성 지원자 필터, 오퍼레터 누락 정보 조기 감지 등 운영 마찰 제거 중심 개선.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/1h-2026-smartrecruiters-for-sap-successfactors-connected-solutions-and-new/ba-p/14381751","srcName":"SAP Community (by SAP)","label":"Winston AI 챗 임베드"},{"id":"sf-31","v":"sf","wave":"1H 2026","date":"2026-05","sku":"time","tags":[],"tier":"T1*","en":"Direct access to the Time Statement from both the employee Time Sheet and the Manager Time Sheet Approval Center. A new business rule function tracks completed months of absence, improving compliance with labour agreements. Germany: On-Call Duty configuration. Australia: Long Service Leave in weeks for NSW, SA and NT. US: FMLA half-day absences and clock-time-based intermittent absences.","ko":"근무시간표와 관리자 승인센터에서 Time Statement 직접 조회. 단체협약 준수를 위한 '완료 개월 수 추적' 업무규칙 함수 신설. 독일 대기근무(On-Call) 설정, 호주 장기근속휴가 주 단위(NSW/SA/NT), 미국 FMLA 반일 및 시각 기반 간헐 부재 지원.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/1h-2026-release-highlights-of-sap-best-practices-for-sap-successfactors/ba-p/14393068","srcName":"SAP Community (by SAP)","label":"Time Statement · 근속 규칙"},{"id":"sf-32","v":"sf","wave":"1H 2026","date":"2026-05","sku":"onboarding","tags":[],"tier":"T1*","en":"Onboarding notifications extended to Microsoft Teams. Administrators can restart only the e-signature step in document flows when new hire details change. Reusable task templates reduce repetitive configuration. New hiring status indicators.","ko":"온보딩 알림의 Microsoft Teams 확장. 신규 입사자 정보 변경 시 전자서명 단계만 선택적으로 재시작 가능. 재사용 가능한 task 템플릿으로 반복 구성 작업 감소. 채용 상태 인디케이터 신설.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/1h-2026-skills-amp-insights-in-sap-successfactors-onboarding-to-fuel-new/ba-p/14371217","srcName":"SAP Community (by SAP)","label":"온보딩 템플릿 · 서명 재시작"},{"id":"sf-33","v":"sf","wave":"1H 2026","date":"2026-05-15","sku":"core","tags":["deprecation"],"tier":"T1*","en":"Legacy People Profile was deleted on 15 May 2026. With the latest People Profile universally available, visibility of Compensation and Reward Statements is now controlled through profile category, card and field-level permissions rather than legacy Employee Views permissions.","ko":"레거시 People Profile 삭제(2026-05-15). 보상·보상명세서 노출 제어가 legacy Employee Views 권한에서 프로필 카테고리·카드·필드 단위 권한으로 이동 — 화면 개선이 아니라 RBP 재설계를 강제하는 변경.","src":"https://community.sap.com/t5/human-capital-management-blog-posts-by-sap/first-half-2026-release-what-s-new-in-sap-successfactors-employee-central/ba-p/14387670","srcName":"SAP Community (by SAP)","label":"레거시 People Profile 삭제"},{"id":"sf-34","v":"sf","wave":"2H 2026","date":"2026-11-13","sku":"ex","tags":["deprecation"],"tier":"T1*","en":"Legacy Home Page will be deleted on 13 November 2026; the latest home page experience was auto-enabled across all systems in 1H 2026. On the same date the legacy People Profile configuration OData V2 API entities move from End of Maintenance to Deleted.","ko":"레거시 홈페이지 삭제 예정(2026-11-13). 최신 홈 경험은 1H 2026에서 전 시스템 자동 활성화됨. 같은 날 레거시 People Profile 구성용 OData V2 API 엔티티가 유지보수 종료에서 '삭제'로 전환.","src":"https://userapps.support.sap.com/sap/support/knowledge/en/3666802","srcName":"SAP KBA 3666802","label":"레거시 홈페이지 삭제"},{"id":"sf-35","v":"sf","wave":"2H 2026","date":"2026-11-13","sku":"platform","tags":["planned"],"tier":"T2","en":"2H 2026 production on 13 November 2026 (preview 12 October). Planned: Long Service Leave in weeks for the remaining Australian states and territories; Joule Work desktop GA targeted for H2 2026.","ko":"2H 2026 production 2026-11-13 (preview 10-12). 계획 항목: 호주 잔여 주·준주 장기근속휴가 주 단위 제공, Joule Work 데스크톱 GA(H2 2026 목표).","src":"https://www.effectivepeople.com/resources/release-management/sap-successfactors-release-schedule-2h-2026","srcName":"Effective People","label":"2H 2026 production"},{"id":"wd-01","v":"wd","wave":"M&A","date":"2021-01","sku":"analytics","tags":["ma"],"tier":"T2","en":"Workday acquired Peakon for approximately $700 million, adding continuous employee-voice and engagement measurement.","ko":"Peakon 인수(약 7억 달러). 상시 직원 의견·몰입도 측정 역량 확보.","src":"https://www.orrick.com/en/News/2021/01/Orrick-Advises-Workday-on-US-700-Million-Cross-Border-Acquisition-of-Peakon","srcName":"Orrick","label":"Peakon 인수"},{"id":"wd-02","v":"wd","wave":"2021R2","date":"2021-10-19","sku":"ex","tags":["landmark"],"tier":"T1","en":"Workday announced Workday Everywhere — a more immersive digital experience delivering Workday into the flow of work — and made Workday Extend generally available to customers.","ko":"Workday Everywhere 발표 — 협업 도구 등 '업무 흐름 속'으로 Workday를 배치하는 방향. 동시에 확장 개발 플랫폼 Workday Extend가 고객 대상 GA.","src":"https://newsroom.workday.com/2021-10-19-Workday-Announces-a-More-Immersive-Digital-Experience-for-Employees-With-Workday-Everywhere","srcName":"Workday Newsroom","label":"Everywhere · Extend GA"},{"id":"wd-03","v":"wd","wave":"M&A","date":"2021-11","sku":"recruiting","tags":["ma"],"tier":"T2","en":"Workday agreed to buy VNDLY for $510 million, adding contingent workforce and vendor management.","ko":"VNDLY 인수 합의(5.1억 달러). 비정규·외부 인력(contingent workforce) 및 공급업체 관리 역량 확보.","src":"https://www.selectsoftwarereviews.com/blog/workday-acquisition-spree","srcName":"SelectSoftware Reviews","label":"VNDLY 인수"},{"id":"wd-04","v":"wd","wave":"2022R2","date":"2022-09","sku":"analytics","tags":[],"tier":"T2","en":"Adaptive Planning gained alternate calendars to manage multiple fiscal year-ends, improvements to dashboards and modelling for acquisitions, and enhanced OfficeConnect functionality.","ko":"Adaptive Planning — 복수 회계연도 마감을 위한 대체 캘린더, 인수 시나리오 모델링·대시보드 개선, OfficeConnect 기능 강화. 다국적·다법인 계획 수립에 직결.","src":"https://qmetrix.com.au/article/workday-adaptive-planning-releases/","srcName":"QMetrix","label":"Adaptive Planning 확장"},{"id":"wd-05","v":"wd","wave":"2023R1","date":"2023-03","sku":"recruiting","tags":[],"tier":"T2","en":"Jobs Hub replaced the Career app for internal candidates, providing a better experience for browsing new job opportunities and managing applications.","ko":"내부 지원자용 Career 앱을 Jobs Hub가 대체. 사내 공모 탐색과 지원 관리 경험 개선 — 내부 이동(internal mobility) 동선의 재설계.","src":"https://www.kainos.com/insights/blogs/our-expert-highlights-from-workdays-2023r2-release","srcName":"Kainos","label":"Jobs Hub"},{"id":"wd-06","v":"wd","wave":"2023R2","date":"2023-09","sku":"succession","tags":["landmark"],"tier":"T2","en":"Manager Insights Hub introduced: uses machine learning to let managers view insights and suggestions about their teams' career growth and development, with personalised opportunity suggestions intended to improve talent development, internal mobility and engagement.","ko":"Manager Insights Hub 도입 — 머신러닝으로 팀원의 경력 성장·개발 인사이트와 기회 추천을 관리자에게 제공. 인재개발·내부 이동·몰입도 제고가 목적.","src":"https://www.kainos.com/insights/blogs/our-expert-highlights-from-workdays-2023r2-release","srcName":"Kainos","label":"Manager Insights Hub"},{"id":"wd-07","v":"wd","wave":"2023R2","date":"2023-09","sku":"perf","tags":[],"tier":"T2","en":"Redesigned goal experience with reduced clicks and stronger visualisations; updates to My Tasks; employees can replace parts of their talent profile with information from their internal job application.","ko":"목표 관리 화면 재설계(클릭 수 감소·시각화 강화), My Tasks 개선. 사내 지원서 정보를 탤런트 프로파일에 반영하는 기능 — 데이터 재입력 제거.","src":"https://commitconsulting.com/blog/our-workday-2023-r2-highlights","srcName":"Commit Consulting","label":"목표 관리 재설계"},{"id":"wd-08","v":"wd","wave":"M&A","date":"2024-02","sku":"recruiting","tags":["ma","landmark"],"tier":"T2","en":"Workday agreed to acquire HiredScore for approximately $530 million, bringing AI-powered talent orchestration into Recruiting.","ko":"HiredScore 인수 합의(약 5.3억 달러). AI 기반 인재 오케스트레이션을 채용 모듈에 내재화 — 이후 Recruiting Agent의 기반.","src":"https://www.selectsoftwarereviews.com/blog/workday-acquisition-spree","srcName":"SelectSoftware Reviews","label":"HiredScore 인수"},{"id":"wd-09","v":"wd","wave":"2024R1","date":"2024-03","sku":"time","tags":[],"tier":"T2","en":"Workers can use a calendar view to enter time for an entire pay period at once, simplifying time entry and reducing errors.","ko":"캘린더 뷰에서 급여기간 전체 근무시간을 한 번에 입력. 입력 단계와 오류를 함께 줄이는 방향.","src":"https://coreteamgroup.com/workday-2024r2-updates-in-hcm-and-total-rewards/","srcName":"Coreteam Group","label":"급여기간 일괄 근태입력"},{"id":"wd-10","v":"wd","wave":"Rising 2024","date":"2024-09-17","sku":"ai","tags":["landmark","ai"],"tier":"T1","en":"Workday announced Illuminate, the next generation of Workday AI. Illuminate models are fuelled by more than 800 billion business transactions processed by the Workday platform annually, and understand the context — the why and how behind every HR and financial process.","ko":"Workday Illuminate 발표. 연간 8,000억 건 이상의 비즈니스 트랜잭션을 학습 기반으로 삼으며, 데이터뿐 아니라 프로세스의 맥락(왜·어떻게)을 이해하는 것을 지향. Workday AI 전략의 분기점.","src":"https://newsroom.workday.com/2024-09-17-Announcing-Workday-Illuminate-TM-The-Next-Generation-of-Workday-AI","srcName":"Workday Newsroom","label":"Illuminate 발표"},{"id":"wd-11","v":"wd","wave":"Rising 2024","date":"2024-09-17","sku":"ex","tags":["ai"],"tier":"T1","en":"Workday Assistant now offers AI-powered, role-specific support, providing quick answers to HR questions from any device and helping employees take faster action with company-specific guidance.","ko":"Workday Assistant가 역할별 AI 지원 제공 — 어떤 기기에서든 인사 질의에 답하고, 회사 고유 가이드에 따라 후속 조치까지 연결.","src":"https://newsroom.workday.com/2024-09-17-Announcing-Workday-Illuminate-TM-The-Next-Generation-of-Workday-AI","srcName":"Workday Newsroom","label":"Workday Assistant AI"},{"id":"wd-12","v":"wd","wave":"M&A","date":"2024-09","sku":"platform","tags":["ma"],"tier":"T2","en":"Workday signed to acquire Evisort for approximately $311 million, adding document intelligence for contract management.","ko":"Evisort 인수 계약(약 3.1억 달러). 계약 관리용 문서 인텔리전스 확보.","src":"https://www.selectsoftwarereviews.com/blog/workday-acquisition-spree","srcName":"SelectSoftware Reviews","label":"Evisort 인수"},{"id":"wd-13","v":"wd","wave":"2024R2","date":"2024-09","sku":"skills","tags":["ai"],"tier":"T2","en":"Workday provides intelligent suggestions for job profile skills and automatic generation of job descriptions within job requisitions, simplifying job creation and aligning it with organisational needs.","ko":"직무 프로파일 스킬 지능형 추천과 채용요청서 내 직무기술서 자동 생성. 직무 정의 작업을 줄이고 조직 요건과 정합성을 맞추는 방향.","src":"https://coreteamgroup.com/workday-2024r2-updates-in-hcm-and-total-rewards/","srcName":"Coreteam Group","label":"직무 스킬 추천 · JD 생성"},{"id":"wd-14","v":"wd","wave":"2025","date":"2025-05-19","sku":"ai","tags":["landmark","ai"],"tier":"T1","en":"Workday unveiled the next generation of Illuminate Agents — Business Process Optimize, Financial Audit, Payroll, Recruiting and Talent Mobility — deployed and managed through the Workday Agent System of Record, a governance layer for first- and third-party agents.","ko":"차세대 Illuminate 에이전트 공개 — 업무프로세스 최적화, 재무감사, 급여, 채용, 인재이동. 자사·타사 에이전트를 함께 등록·관리하는 거버넌스 레이어 'Agent System of Record'를 통해 배포·관리.","src":"https://newsroom.workday.com/2025-05-19-Workday-Unveils-Next-Generation-of-Illuminate-Agents-to-Transform-HR-and-Finance-Operations","srcName":"Workday Newsroom","label":"Illuminate 에이전트 · ASOR"},{"id":"wd-15","v":"wd","wave":"Rising 2025","date":"2025-09-16","sku":"ai","tags":["landmark","ai"],"tier":"T1","en":"At Rising 2025 Workday expanded Illuminate with new agents for HR, Finance and Industry, and introduced Workday Flex Credits — a transparent subscription-based consumption model for AI — alongside Workday Data Cloud, Workday Build with a low-code Flowise Agent Builder, and Microsoft Entra integration for agent governance. New Illuminate agents were slated for 2026.","ko":"Rising 2025에서 HR·재무·산업별 Illuminate 에이전트 확대. AI 소비 기반 과금 모델 'Flex Credits' 도입, Workday Data Cloud, Flowise 기반 로우코드 에이전트 빌더 'Workday Build', 에이전트 거버넌스용 Microsoft Entra 연계 발표. 신규 에이전트는 2026년 제공 예정으로 안내.","src":"https://newsroom.workday.com/2025-09-16-Workday-Illuminate-TM-Expands-with-New-AI-Agents-for-HR,-Finance,-and-Industry","srcName":"Workday Newsroom","label":"Flex Credits · Build"},{"id":"wd-16","v":"wd","wave":"M&A","date":"2025-09","sku":"learning","tags":["ma","landmark"],"tier":"T2","en":"Workday signed to acquire Sana for $1.1 billion (enterprise knowledge and AI-powered search/agents), having acquired Flowise in August 2025 and signed for Paradox, whose acquisition completed on 1 October 2025. Pipedream, with 3,000+ connectors, was also acquired.","ko":"Sana 인수 계약(11억 달러, 기업 지식·AI 검색/에이전트). 2025년 8월 Flowise 인수 및 Paradox 인수 계약(2025-10-01 완료), 3,000개 이상 커넥터를 보유한 Pipedream도 인수. 1년 내 집중된 AI 자산 확보.","src":"https://www.orrick.com/en/News/2025/09/Workday-to-Acquire-Sana-for-1-Billion","srcName":"Orrick","label":"Sana · Paradox · Pipedream"},{"id":"wd-17","v":"wd","wave":"2025R2","date":"2025-09","sku":"core","tags":[],"tier":"T2","en":"Workday 2025R2 delivered enhancements to HCM and Payroll, including AI-driven hiring tools, onboarding improvements, payroll automation and streamlined HR workflows.","ko":"2025R2 — HCM·급여 개선. AI 기반 채용 도구, 온보딩 개선, 급여 자동화, 인사 워크플로 간소화.","src":"https://www.opkey.com/workday-2025r2-release","srcName":"Opkey","label":"2025R2 HCM · 급여"},{"id":"wd-18","v":"wd","wave":"2026R1","date":"2026-03-14","sku":"core","tags":[],"tier":"T2","en":"2026R1 introduced enhanced translation capabilities — the Translate Business Object task can generate translation drafts automatically using Google Translate — a modernised user interface, more precise control of job profile visibility during staffing transactions, Journeys learning steps that auto-complete on training completion, and compliance updates with enhanced security audit trails.","ko":"2026R1 — 번역 기능 강화(Translate Business Object 작업이 Google Translate로 번역 초안 자동 생성), UI 현대화, 인사 트랜잭션 중 직무 프로파일 노출 범위 정밀 제어, Journeys의 학습 단계 자동 완료, 컴플라이언스 및 보안 감사 추적 강화.","src":"https://successday.nl/en/workday-2026r1-hcm-updates-user-experience-and-governance/","srcName":"Successday","label":"2026R1 번역 · UI · 거버넌스"},{"id":"wd-19","v":"wd","wave":"2026R2","date":"2026-09-19","sku":"ex","tags":["ai"],"tier":"T2","en":"2026R2 continues improvements with a focus on smarter, AI-assisted support: when you ask a question in Workday Help, the system can route it to the right team and suggest answers faster. The Case Agent automates administrative tasks to reduce resolution times.","ko":"2026R2 — AI 지원 강화. Workday Help에 질문하면 적합한 담당 조직으로 자동 라우팅하고 답변을 제안. Case Agent가 행정 업무를 자동화해 처리 시간 단축.","src":"https://coreteamgroup.com/workday-2026r2-new-releases-and-schedule-management-complete-release-readiness/","srcName":"Coreteam Group","label":"Workday Help AI 라우팅"},{"id":"wd-20","v":"wd","wave":"2026R2","date":"2026-09-19","sku":"core","tags":[],"tier":"T2","en":"2026R2 reaches production on 19 September 2026 with changes across HCM, Financial Management, Payroll, Recruiting, Time Tracking, Adaptive Planning and Integrations — including new Absence and Time Tracking enhancements, and Core and Advanced Compensation. Feature-level detail is confirmed only in Workday's own documentation, published 7 August 2026 behind Community login.","ko":"2026R2 production 2026-09-19. HCM·재무·급여·채용·근태·Adaptive Planning·통합 전반 변경, 부재·근태 개선과 기본/고급 보상 포함. 단, 기능 단위 확정 내용은 2026-08-07 공개된 Workday 자체 문서(Community 로그인)에서만 확인 가능.","src":"https://zeneesha.com/workday-2026-r2-the-complete-release-guide/","srcName":"Zeneesha","label":"2026R2 production"},{"id":"wd-21","v":"wd","wave":"Ongoing","date":"2026-09","sku":"recruiting","tags":["ai"],"tier":"T1*","en":"The Recruiting Agent, powered by HiredScore, takes on time-consuming tasks to minimise time-to-fill. Vendor-stated outcomes: on average customers can cover 70% of their requisitions from existing talent pools, and see a 55% reduction in screening time. The Contingent Sourcing Agent accelerates temporary hiring.","ko":"HiredScore 기반 Recruiting Agent — 채용 소요기간 단축을 목표로 반복 업무 수행. 벤더 발표 수치: 기존 인재풀로 채용요청의 평균 70% 충당, 스크리닝 시간 55% 감소. Contingent Sourcing Agent는 단기·비정규 채용을 가속. ※ 두 수치 모두 벤더 자체 주장치로, 산출 근거는 미공개.","src":"https://marketplace.workday.com/en-US/apps/529302/recruiting-agent","srcName":"Workday Marketplace","label":"Recruiting Agent"}]};
+const KO = {"insights":[{"n":1,"title":"두 벤더는 같은 해에 AI로 진입했지만, 진입 순서가 정반대였다","body":"Workday는 2024-09 Illuminate라는 <b>플랫폼을 먼저 세우고</b> 2025년에 에이전트·거버넌스(Agent System of Record)·과금(Flex Credits)을 얹은 뒤 2026년에 확산시켰다. SAP는 2023-11 Joule로 <b>대화형 기능을 먼저 내고</b> 2024년 모듈별 AI 기능 30여 종, 2025년 첫 모듈 에이전트, 2026년 에이전트 4종 GA 순으로 올라왔다. 같은 목적지를 반대 방향에서 올라온 셈이다.","soWhat":"벤더 비교 시 \"어느 쪽이 AI를 더 잘하나\"는 잘못된 질문이다. Workday는 <b>에이전트를 운영할 새 거버넌스 객체</b>를 고객에게 요구하고, SAP는 <b>기존 RBP 설계의 품질</b>을 그대로 AI 리스크로 전이시킨다. 실사 질문이 달라져야 한다.","evidence":["wd-10","wd-14","wd-15","sf-11","sf-16","sf-22","sf-26"]},{"n":2,"title":"스킬 데이터가 '자동으로 채워지는 것'에서 '승인받아야 하는 것'으로 바뀐 쪽은 SAP다","body":"SAP는 2023 Talent Intelligence Hub GA → 2024 직무 프로파일·과정 설명문에서 AI 스킬 추출 → 2026 Skills Governance(임포트·AI 추론 스킬을 라이브러리 등재 전 검토·표준화·승인)로 3년에 걸쳐 <b>생성에서 통제로</b> 이동했다. Workday Skills Cloud는 \"추가 유지보수 없이\" ML이 채우는 설계 기조를 유지한다.","soWhat":"기준 정보 거버넌스를 중시하는 조직에는 SAP 모델이 설명하기 쉽고, 속도를 중시하는 조직에는 Workday 모델이 가볍다. 다만 <b>승인 주체가 정해지지 않은 채 거버넌스 기능을 켜면</b> 스테이징 큐만 쌓이다 일괄 승인으로 끝난다 — 도구가 소유권 공백을 메워주지는 않는다.","evidence":["sf-10","sf-14","sf-27","wd-13"]},{"n":3,"title":"채용은 둘 다 인수로 해결했지만, Workday는 보강하고 SAP는 교체한다","body":"Workday는 HiredScore(2024-02)를 기존 Recruiting 모듈 <b>안으로</b> 흡수해 Recruiting Agent로 만들었다. SAP는 SmartRecruiters(2025-09 인수 완료)로 SF Recruiting의 <b>혁신 경로 자체를 이전</b>하고 있으며, 1H 2026에는 Career Site Builder를 통한 Winston AI 챗 임베드가 들어왔다.","soWhat":"SF Recruiting 고객은 sunset 일자가 없다는 사실을 \"아무것도 안 해도 된다\"로 읽기 쉽다. 실제 변화는 <b>신규 투자 방향</b>이므로, 향후 24개월 내 착수할 채용 영역 개발은 SmartRecruiters 전제로 재설계하거나 최소 구현으로 축소하는 편이 손실이 적다.","evidence":["wd-08","wd-21","sf-25","sf-30"]},{"n":4,"title":"6년간 가장 자주 손댄 영역은 승계·경력개발이며, 방향은 '공석 채우기 → 내부 이동 시장'이다","body":"SAP: Opportunity Marketplace GA(2021) → Career & Talent Development 통합(2024) → 스킬 기반 후계자 추천(2025). Workday: Jobs Hub로 사내 지원 동선 재설계(2023R1) → Manager Insights Hub(2023R2) → Talent Mobility Agent(2025). 두 벤더 모두 <b>승계 계획이라는 폐쇄적 산출물에서, 상시 열린 내부 기회 시장으로</b> 무게를 옮겼다.","soWhat":"이 방향은 연공 기반 승진·이동 관행과 정면으로 만난다. 제품은 준비되어 있으나, 제도가 준비되지 않으면 기능은 켜지고 사용되지 않는다. 도입 논의의 첫 질문은 기능이 아니라 <b>\"사내 공모에 실제로 지원할 수 있는 조직인가\"</b>여야 한다.","evidence":["sf-02","sf-15","sf-23","wd-05","wd-06","wd-14"]},{"n":5,"title":"6년간 한 번도 바뀌지 않은 구조적 차이 — SAP는 폐기 일자를 공표하고, Workday는 자동 적용한다","body":"SAP는 레거시 People Profile을 2026-05-15에 삭제했고, 레거시 홈페이지와 구성 API를 2026-11-13에 삭제한다 — 모두 <b>사전 공표된 날짜</b>다. Workday는 자동 적용(automatically available) 기능이 릴리스 당일 테넌트에 반영되며, 사전 opt-out이 없다.","soWhat":"SAP 리스크는 <b>명시된 날짜 이전의 잔여 작업량</b>이고, Workday 리스크는 <b>회귀테스트 창의 밀도</b>다. 예산 형태도, 필요한 인력 투입 시점도, 경영층에 보고할 지표도 전부 다르다. 두 벤더를 같은 변경관리 프로세스로 묶으면 반드시 한쪽이 샌다.","evidence":["sf-33","sf-34","wd-20"]},{"n":6,"title":"AI 비용이 라이선스에서 분리된 시점은 2025년이다","body":"Workday는 2025-09 Rising에서 Flex Credits라는 <b>소비 기반 구독 모델</b>을 도입해 AI를 별도 과금 축으로 떼어냈다. SAP 측의 대응 과금 구조는 본 조사 범위에서 확인되지 않았다.","soWhat":"2021–2024년 계약 구조를 전제로 만든 TCO 모델은 2025년 이후 현실을 반영하지 못한다. Workday 측은 <b>변동비 라인</b>을, SAP 측은 <b>모듈 증식 라인</b>을 각각 세워야 하며, 두 벤더를 하나의 평균 PEPM으로 비교하면 양쪽의 실제 리스크가 모두 사라진다.","evidence":["wd-15"]},{"n":7,"title":"로컬라이제이션 투자 방향은 6년 내내 한국을 향한 적이 없다","body":"본 조사에서 확인된 국가별 기능 항목은 독일(대기근무), 호주(장기근속휴가), 미국(FMLA) 중심이다. 급여 로컬라이제이션은 SAP ECP가 한국을 native 지원하고 Workday Payroll은 소수 국가만 native 지원해 한국은 파트너 연동 경로다. <b>2021–2026년 어느 릴리스에서도 한국 전용 기능 항목은 확인되지 않았다</b>(본 조사 범위 기준).","soWhat":"한국 특화 요건은 <b>표준 기능의 로드맵을 기다리는 대상이 아니라, 설계 초기에 확장·연동으로 해결할 대상</b>이다. 주 52시간제, 포괄임금, 가산연차, 연말정산 같은 항목을 \"다음 릴리스에 들어올 것\"으로 전제한 계획은 6년치 이력이 지지하지 않는다.","evidence":["sf-31"]}],"practice":[{"key":"skills","theme":"스킬 기반 인사","themeEn":"Skills-based HR","benefit":"직무중심 인사 전환 논의에 필요한 스킬 기준 정보를 시스템 안에 확보할 수 있다. SAP의 승인 워크플로는 계열사·부서별로 제각각인 스킬 용어를 하나의 기준으로 수렴시키는 실물 장치이며, 개념이 아니라 화면으로 설명할 수 있다는 점에서 경영층 설득이 쉽다. 자격증 중앙 관리(만료·갱신 규칙)는 법정 자격·면허 관리 운영과 바로 맞물린다.","consideration":"한국 기업의 직무기술서는 실제 수행업무와 괴리가 큰 경우가 많다. 그 상태에서 AI로 직무 프로파일에서 스킬을 추출하면 <b>문서상의 허구를 그대로 증폭</b>한다. 추출보다 직무기술서 현행화가 먼저다. 또한 스킬 등급이 보상·승진에 연결되는 순간 제도 변경 이슈로 성격이 바뀌므로, 기능 도입 전에 노무 검토 경로를 확보해야 한다."},{"key":"ai","theme":"AI 에이전트","themeEn":"AI agents","benefit":"인사팀 문의 응대 부하가 큰 국내 대기업에서 급여·근태·증명서 같은 반복 문의를 자연어로 흡수할 수 있다. SAP Joule은 기존 RBP 권한을 상속하므로 AI 전용 권한 체계를 새로 만들지 않아도 되고, Workday는 Agent System of Record로 에이전트 목록과 권한을 한 곳에서 관리한다.","consideration":"① <b>개인정보 보호법상 국외이전</b> — 해외 데이터센터와 AI 처리 경로에 대한 고지·동의 범위를 법무와 재확인해야 한다. ② <b>RBP가 느슨하면 AI가 그 느슨함을 증폭</b>한다 — 화면을 찾아 들어가야 보이던 데이터가 자연어 한 줄로 나온다. 권한 재설계가 기능 도입보다 앞선다. ③ <b>한국어 품질은 릴리스 노트로 확인되지 않는다</b> — 실제 한국어 질의로 PoC하지 않은 채 도입을 결정하지 말 것."},{"key":"recruiting","theme":"채용","themeEn":"Recruiting","benefit":"정기공채에서 수시채용으로 무게가 옮겨가며 채용요청 건수가 늘어난 조직일수록 스크리닝 자동화의 체감 효과가 크다. 사내 인재풀 우선 활용은 경력직 채용 비용 구조에 직접 작용하고, 사내 공모 동선 개선은 내부 이동률 지표와 연결된다.","consideration":"<b>채용절차의 공정화에 관한 법률</b>상 채용서류 보관·파기 및 채용 과정 고지 의무를 AI 도입 설계에 반영해야 한다. AI 평가·추천을 쓸 경우 지원자 고지, 이의제기 경로, 차별 금지 관련 검토가 함께 필요하다. 벤더가 제시하는 70%·55% 같은 수치는 <b>산출 근거가 공개되지 않은 자체 주장치</b>이므로 내부 목표치나 사업계획 근거로 삼기에 부적절하다."},{"key":"perf","theme":"성과·보상","themeEn":"Performance & Compensation","benefit":"Variable Pay의 중첩 조건식은 직급 × 평가등급 × 근속 × 법인별 계수가 겹치는 한국식 성과급 산식을 템플릿을 쪼개지 않고 수용할 여지를 준다. AI 코멘트 제안과 성과 인사이트는 상대평가 하에서 평가자의 서술 부담을 줄인다.","consideration":"<b>취업규칙 불이익변경 시 근로자 과반수 동의</b>(근로기준법) — AI 기반 평가·승계 로직 도입이 평가·보상 제도의 변경으로 해석되면 동의 절차 대상이 된다. 상대평가 관행에서 360 감성 분석 결과가 평가 근거로 쓰이면 이의제기 리스크가 커지므로, <b>AI 산출물은 참고자료로 한정하고 최종 평가 근거에서 분리</b>하는 설계를 권고한다."},{"key":"time","theme":"근태·급여","themeEn":"Time & Payroll","benefit":"SAP ECP는 한국 native 로컬라이제이션을 제공하므로 국내 법인 급여를 스위트 안에서 처리할 수 있다. 1H 2026의 '완료 개월 수 추적' 업무규칙은 근속 기반 제도(가산연차 등) 산정 로직에 활용 여지가 있고, Workday의 급여기간 일괄 근태 입력은 현장 입력 부하를 줄인다.","consideration":"<b>주 52시간제</b>, 선택·탄력적 근로시간제, 포괄임금 관행은 벤더 표준 근태 모델과 자주 충돌한다. 표준 기능 커버 범위는 반드시 실제 근태 규정으로 PoC해야 한다. '완료 개월 수 추적'은 유럽 단체협약을 염두에 둔 설계이며 <b>근로기준법 산정 방식과 일치한다는 근거는 없다</b>. Workday를 검토한다면 한국 급여는 파트너 연동을 전제로 범위와 비용을 별도 산정할 것."},{"key":"ex","theme":"직원경험·HR서비스","themeEn":"EX / HR Service","benefit":"가이디드 경험은 '생활 사건 1건 → 여러 시스템 갱신' 구조다. 경조사 신청, 가족수당 변경, 연말정산 부양가족 갱신처럼 국내 기업에서 반복되는 다중 시스템 이벤트에 그대로 매핑된다. 비SAP 시스템 데이터 결합을 명시적으로 지원한다는 점이 국내 환경에서 특히 유효하다.","consideration":"그룹웨어·복지몰·증명서 발급처럼 국내 특유의 주변 시스템 연동이 붙는 순간 범위와 비용이 급증한다. 첫 대상은 <b>비SAP 의존이 가장 적고 연간 발생 건수가 많은 이벤트</b>로 한정해야 한다. 발생 건수가 적은 이벤트를 고르면 화려하지만 ROI가 나오지 않는다."},{"key":"gov","theme":"릴리스 운영 거버넌스","themeEn":"Release governance","benefit":"두 벤더 모두 4~5주 preview를 제공하므로, 변경관리 캘린더를 연 2회가 아니라 <b>연 4회 검증 창</b>으로 설계하면 예측 가능성이 확보된다. 폐기 일자가 사전 공표되는 SAP 쪽은 중기 예산 계획에 그대로 반영할 수 있다.","consideration":"SAP 리스크는 <b>명시된 날짜 이전의 잔여 작업량</b>, Workday 리스크는 <b>회귀테스트 창의 밀도</b>로 성격이 다르다. 같은 프로세스로 묶으면 한쪽이 샌다. 또한 Workday 릴리스 노트는 Community 로그인 기반이므로, 국내 고객사 내부 배포용 요약본 산출을 <b>AMS·운영 계약에 명시</b>해 두어야 변화관리가 담당자 개인 역량에 의존하지 않는다."}]};
+
+const YEARS = [2021,2022,2023,2024,2025,2026];
+const TAGS = [
+  {k:"landmark", ko:"분기점"},
+  {k:"ai", ko:"AI · 에이전트"},
+  {k:"deprecation", ko:"폐기 · 강제변경"},
+  {k:"ma", ko:"인수"},
+  {k:"planned", ko:"계획"}
+];
+const state = { v:"all", tags:new Set(), q:"", sel:null };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const yearOf = m => +m.date.slice(0,4);
+
+// -- stat bar --
+(function(){
+  const wd = DATA.milestones.filter(m=>m.v==="wd").length;
+  const sf = DATA.milestones.filter(m=>m.v==="sf").length;
+  const stats = [
+    [DATA.milestones.length, "수록 마일스톤"],
+    ["12", "반기 릴리스 웨이브"],
+    [DATA.skus.length, "기능영역 · SKU"],
+    [wd+" / "+sf, "Workday / SuccessFactors"],
+    [DATA.milestones.filter(m=>(m.tags||[]).includes("deprecation")).length, "폐기 · 강제변경"]
+  ];
+  document.getElementById("statbar").innerHTML = stats.map(s =>
+    '<div class="stat"><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></div>').join("");
+})();
+
+// -- release rhythm svg --
+(function(){
+  const W=1000, H=250, padL=52, padR=24, padT=34, padB=52;
+  const cols=12, cw=(W-padL-padR)/cols;
+  const laneWd=padT+38, laneSf=padT+108;
+  const waves=[];
+  YEARS.forEach((y,yi)=>{
+    [0,1].forEach(h=>{
+      const i=yi*2+h;
+      waves.push({i, lane:"wd", pos:0.42, exact:(y===2025||y===2026),
+        date: y===2026 ? (h? "9/19":"3/14") : (y===2025 ? (h?"9월":"3월") : null)});
+      waves.push({i, lane:"sf", pos:0.80, exact:(y===2026),
+        date: y===2026 ? (h? "11/13":"5/15") : null});
+    });
+  });
+  const x = w => padL + w.i*cw + w.pos*cw;
+  const todayX = padL + 11*cw + (2.5/6)*cw;
+  const L=(x1,y1,x2,y2,cls)=>'<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" class="'+cls+'"/>';
+  const T=(tx,ty,cls,anchor,txt)=>'<text x="'+tx+'" y="'+ty+'" class="'+cls+'" text-anchor="'+anchor+'">'+txt+'</text>';
+
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="2021년부터 2026년까지 반기별 두 벤더의 production 시점 비교. Workday는 각 반기 중반, SuccessFactors는 각 반기 말에 위치한다.">';
+  for(let i=0;i<=cols;i++) s+=L(padL+i*cw, padT-8, padL+i*cw, H-padB+8, 'grid-l');
+  YEARS.forEach((y,yi)=>{
+    s+=T(padL+(yi*2+1)*cw, H-padB+29, 'ax-year', 'middle', y);
+    ["1H","2H"].forEach((hl,h)=>{ s+=T(padL+(yi*2+h)*cw+cw/2, H-padB+12, 'ax-half', 'middle', hl); });
+  });
+  s+=L(padL, laneWd, W-padR, laneWd, 'rail-l');
+  s+=L(padL, laneSf, W-padR, laneSf, 'rail-l');
+  for(let i=0;i<cols;i++){
+    const a=waves.find(w=>w.i===i&&w.lane==="wd"), b=waves.find(w=>w.i===i&&w.lane==="sf");
+    s+=L(x(a), laneWd, x(b), laneSf, 'conn-l');
+  }
+  s+=L(todayX, padT-8, todayX, H-padB+8, 'today-l');
+  s+=T(todayX-7, padT-14, 'ax-today', 'end', '오늘 2026-09-16');
+  waves.forEach(w=>{
+    const y = w.lane==="wd" ? laneWd : laneSf;
+    s+='<circle cx="'+x(w)+'" cy="'+y+'" r="6" class="mk '+w.lane+(w.exact?'':' hollow')+'"/>';
+    if(w.date) s+=T(x(w), w.lane==="wd"? y-13 : y+21, 'dt '+w.lane, 'middle', w.date);
+  });
+  s+=T(padL, laneWd-22, 'lnt wd', 'start', 'WORKDAY · R1 / R2');
+  s+=T(padL, laneSf+40, 'lnt sf', 'start', 'SUCCESSFACTORS · 1H / 2H');
+  s+='</svg>';
+  document.getElementById("rhythmChart").innerHTML=s;
+})();
+
+// -- filter chips --
+document.getElementById("tagChips").innerHTML = TAGS.map(t =>
+  '<button type="button" class="chip" id="tag-'+t.k+'" data-tag="'+t.k+'" aria-pressed="false">'+esc(t.ko)+'</button>').join("");
+
+// -- matrix --
+function visible(m){
+  if(state.v!=="all" && m.v!==state.v) return false;
+  if(state.tags.size && !(m.tags||[]).some(t=>state.tags.has(t))) return false;
+  if(state.q){
+    const hay=(m.label+" "+m.ko+" "+m.en+" "+m.wave).toLowerCase();
+    if(!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+function renderMatrix(){
+  const shown = DATA.milestones.filter(visible);
+  document.getElementById("mcount").textContent = shown.length + " / " + DATA.milestones.length + " 항목";
+  let h = '<thead><tr><th scope="col">기능영역 · SKU</th>' +
+    YEARS.map(y=>'<th scope="col">'+y+'</th>').join("") + '</tr></thead><tbody>';
+  DATA.skus.forEach(sku=>{
+    const rowItems = shown.filter(m=>m.sku===sku.key);
+    h += '<tr'+(rowItems.length?'':' class="empty-row"')+'><th scope="row"><span class="ko">'+esc(sku.ko)+'</span><span class="en">'+esc(sku.en)+'</span></th>';
+    YEARS.forEach(y=>{
+      const cell = rowItems.filter(m=>yearOf(m)===y);
+      h += '<td>'+(cell.length? '<div class="cellwrap">'+cell.map(m=>{
+        const depr=(m.tags||[]).includes("deprecation")?" is-depr":"";
+        return '<button type="button" class="mchip '+m.v+depr+'" id="chip-'+m.id+'" data-id="'+m.id+'" aria-current="'+(state.sel===m.id)+'">'+
+          '<span class="w">'+esc(m.wave)+'</span>'+esc(m.label)+'</button>';
+      }).join("")+'</div>' : '')+'</td>';
+    });
+    h += '</tr>';
+  });
+  document.getElementById("matrixTable").innerHTML = h + '</tbody>';
+}
+function renderDetail(){
+  const box=document.getElementById("detail");
+  const m = DATA.milestones.find(x=>x.id===state.sel);
+  if(!m){ box.innerHTML='<div class="empty-detail">위 매트릭스에서 항목을 선택하면 영어 원문 · 한글 해설 · 출처가 여기에 표시됩니다.</div>'; return; }
+  const sku = DATA.skus.find(s=>s.key===m.sku);
+  const vname = m.v==="wd" ? "Workday" : "SAP SuccessFactors";
+  const skuName = m.v==="wd" ? sku.wd : sku.sf;
+  const tagKo = (m.tags||[]).map(t=>(TAGS.find(x=>x.k===t)||{ko:t}).ko);
+  box.innerHTML =
+    '<div class="detail-head">'+
+      '<span class="vtag '+m.v+'">'+esc(vname)+'</span>'+
+      '<strong style="font-size:15px">'+esc(m.label)+'</strong>'+
+      '<span class="mono" style="font-size:12px;color:var(--ink-3)">'+esc(m.wave)+' · '+esc(m.date)+'</span>'+
+      '<span class="tier">'+esc(m.tier)+'</span>'+
+      (tagKo.length? '<span class="mono" style="font-size:11px;color:var(--ink-3)">'+esc(tagKo.join(" · "))+'</span>':'')+
+    '</div>'+
+    '<div class="detail-body">'+
+      '<div class="dpane"><span class="eyebrow">English — source wording</span><p>'+esc(m.en)+'</p></div>'+
+      '<div class="dpane ko"><span class="eyebrow">한글 해설</span><p>'+m.ko+'</p></div>'+
+    '</div>'+
+    '<div class="detail-foot">'+
+      '<span><b>SKU</b> · '+esc(skuName)+'</span>'+
+      '<span><b>기능영역</b> · '+esc(sku.ko)+'</span>'+
+      '<span><b>출처</b> · <a href="'+esc(m.src)+'" target="_blank" rel="noopener">'+esc(m.srcName)+'</a></span>'+
+    '</div>';
+}
+function select(id){
+  state.sel = (state.sel===id)? null : id;
+  renderMatrix(); renderDetail();
+  if(state.sel){
+    const el=document.getElementById("chip-"+state.sel);
+    if(el) el.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
+  }
+}
+document.getElementById("matrixTable").addEventListener("click", e=>{
+  const b=e.target.closest(".mchip"); if(b) select(b.dataset.id);
+});
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  state.v=b.dataset.v;
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+  renderMatrix();
+}));
+document.getElementById("tagChips").addEventListener("click", e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  const t=b.dataset.tag;
+  if(state.tags.has(t)){ state.tags.delete(t); b.setAttribute("aria-pressed","false"); }
+  else { state.tags.add(t); b.setAttribute("aria-pressed","true"); }
+  renderMatrix();
+});
+document.getElementById("q").addEventListener("input", e=>{
+  state.q = e.target.value.trim().toLowerCase(); renderMatrix();
+});
+
+// -- insights --
+document.getElementById("insights-list").innerHTML = KO.insights.map(i=>{
+  const ev = i.evidence.map(id=>{
+    const m=DATA.milestones.find(x=>x.id===id);
+    return m? '<button type="button" class="evb '+m.v+'" data-go="'+m.id+'">'+esc(m.label)+'</button>' : '';
+  }).join("");
+  return '<article class="icard">'+
+    '<h3><span>'+String(i.n).padStart(2,"0")+'</span>'+esc(i.title)+'</h3>'+
+    '<p>'+i.body+'</p>'+
+    '<div class="sw"><em>So what</em>'+i.soWhat+'</div>'+
+    '<div class="ev"><span class="lbl">근거</span>'+ev+'</div>'+
+  '</article>';
+}).join("");
+document.getElementById("insights-list").addEventListener("click", e=>{
+  const b=e.target.closest("[data-go]"); if(!b) return;
+  state.v="all"; state.tags.clear(); state.q="";
+  document.getElementById("q").value="";
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", String(x.dataset.v==="all")));
+  document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed","false"));
+  state.sel=b.dataset.go;
+  renderMatrix(); renderDetail();
+  document.getElementById("matrix").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+// -- korean practice --
+document.getElementById("practice-list").innerHTML = KO.practice.map(p=>
+  '<div class="prow">'+
+    '<div class="ptitle"><h3>'+esc(p.theme)+'</h3><span class="en">'+esc(p.themeEn)+'</span></div>'+
+    '<div class="pcols">'+
+      '<div class="pcol b"><span class="ptag">Benefit · 적용 효과</span><p>'+p.benefit+'</p></div>'+
+      '<div class="pcol c"><span class="ptag">Consideration · 고려사항</span><p>'+p.consideration+'</p></div>'+
+    '</div>'+
+  '</div>').join("");
+
+// -- tier legend --
+document.getElementById("tierlist").innerHTML = Object.entries(DATA.meta.tierLegend)
+  .map(([k,v])=>'<li><span class="mono" style="color:var(--ink)">'+esc(k)+'</span> — '+esc(v)+'</li>').join("");
+
+renderMatrix();
+</script>

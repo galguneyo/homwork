@@ -26,7 +26,8 @@
   --sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
   --navh:54px;
-  --measure:1400px;
+  --gridgap:14px;
+  --half:calc((100% - 11 * var(--gridgap)) / 12 * 6 + 5 * var(--gridgap));
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth; scroll-padding-top:calc(var(--navh) + 18px)}
@@ -77,7 +78,7 @@ nav.top .links a.navx:hover{color:var(--ink)}
   background:linear-gradient(104deg,var(--ink) 30%,color-mix(in srgb,var(--a2) 60%,var(--ink)) 62%,color-mix(in srgb,var(--a1) 55%,var(--ink)) 92%);
   -webkit-background-clip:text; background-clip:text; color:transparent}
 .mast .sub{color:var(--ink-2); max-width:62ch; margin-top:14px; font-size:16px}
-.mastgrid{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:14px; margin-top:20px; align-items:stretch}
+.mastgrid{display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:var(--gridgap); margin-top:20px; align-items:stretch}
 .asgrid{display:contents}
 .mastgrid .sub{grid-column:1 / 7; max-width:none; margin:0 0 6px; font-size:15.5px; line-height:1.66}
 .vlock.wd{grid-column:1 / 4}
@@ -132,7 +133,9 @@ section{padding-block:clamp(34px,5vw,56px); scroll-margin-top:calc(var(--navh) +
 .shead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:8px}
 .shead h2{font-size:clamp(20px,2.4vw,26px)}
 .shead .n{font-family:var(--mono); font-size:12px; color:var(--ink-3); font-weight:500}
-.sdek{color:var(--ink-2); max-width:78ch; font-size:14.5px; margin-bottom:22px}
+.sdek{color:var(--ink-2); font-size:14.5px; line-height:1.66; margin-bottom:22px;
+  /* six of twelve masthead columns, gaps included — matches .mastgrid .sub exactly */
+  max-width:var(--half)}
 
 .chartbox{padding:24px 20px 14px; overflow-x:auto}
 .chartbox svg{display:block; min-width:820px; width:100%; height:auto}
@@ -331,6 +334,7 @@ table.matrix tr.empty-row{display:none}
 footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
 
 @media (max-width:1180px){
+  .sdek{max-width:none}
   .stage, .stage.open{grid-template-columns:minmax(0,1fr); gap:16px}
   .drawer-inner{width:100%; position:static}
   .matrix-scroll{max-height:none}

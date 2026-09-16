@@ -9,6 +9,17 @@
       "T1*": "Vendor-authored page cited, but read via search summary (egress-blocked); verify original before client use",
       "T2": "Implementation partner / SI",
       "T3": "Media, analyst, or community-member post"
+    },
+    "waveNote": "Position inside each half-year is derived from the production date when known; otherwise from the vendor's observed cadence (Workday mid-half, SuccessFactors late-half). precision: day > month > half. planned waves are expected from the established cadence, not dates either vendor has announced.",
+    "cadence": {
+      "wd": {
+        "pos": 0.42,
+        "note": "R1 in March, R2 in September"
+      },
+      "sf": {
+        "pos": 0.8,
+        "note": "1H in May, 2H in November"
+      }
     }
   },
   "skus": [
@@ -973,6 +984,288 @@
       "src": "https://marketplace.workday.com/en-US/apps/529302/recruiting-agent",
       "srcName": "Workday Marketplace",
       "label": "Recruiting Agent"
+    }
+  ],
+  "releaseWaves": [
+    {
+      "v": "wd",
+      "year": 2021,
+      "half": 1,
+      "wave": "2021R1",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2021,
+      "half": 1,
+      "wave": "1H 2021",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2021,
+      "half": 2,
+      "wave": "2021R2",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2021,
+      "half": 2,
+      "wave": "2H 2021",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2022,
+      "half": 1,
+      "wave": "2022R1",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2022,
+      "half": 1,
+      "wave": "1H 2022",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2022,
+      "half": 2,
+      "wave": "2022R2",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2022,
+      "half": 2,
+      "wave": "2H 2022",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2023,
+      "half": 1,
+      "wave": "2023R1",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2023,
+      "half": 1,
+      "wave": "1H 2023",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2023,
+      "half": 2,
+      "wave": "2023R2",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2023,
+      "half": 2,
+      "wave": "2H 2023",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2024,
+      "half": 1,
+      "wave": "2024R1",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2024,
+      "half": 1,
+      "wave": "1H 2024",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2024,
+      "half": 2,
+      "wave": "2024R2",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2024,
+      "half": 2,
+      "wave": "2H 2024",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2025,
+      "half": 1,
+      "wave": "2025R1",
+      "date": "2025-03",
+      "label": "3월",
+      "precision": "month",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2025,
+      "half": 1,
+      "wave": "1H 2025",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2025,
+      "half": 2,
+      "wave": "2025R2",
+      "date": "2025-09",
+      "label": "9월",
+      "precision": "month",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2025,
+      "half": 2,
+      "wave": "2H 2025",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2026,
+      "half": 1,
+      "wave": "2026R1",
+      "date": "2026-03-14",
+      "label": "3/14",
+      "precision": "day",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2026,
+      "half": 1,
+      "wave": "1H 2026",
+      "date": "2026-05-15",
+      "label": "5/15",
+      "precision": "day",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2026,
+      "half": 2,
+      "wave": "2026R2",
+      "date": "2026-09-19",
+      "label": "9/19",
+      "precision": "day",
+      "planned": false
+    },
+    {
+      "v": "sf",
+      "year": 2026,
+      "half": 2,
+      "wave": "2H 2026",
+      "date": "2026-11-13",
+      "label": "11/13",
+      "precision": "day",
+      "planned": false
+    },
+    {
+      "v": "wd",
+      "year": 2027,
+      "half": 1,
+      "wave": "2027R1",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": true
+    },
+    {
+      "v": "sf",
+      "year": 2027,
+      "half": 1,
+      "wave": "1H 2027",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": true
+    },
+    {
+      "v": "wd",
+      "year": 2027,
+      "half": 2,
+      "wave": "2027R2",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": true
+    },
+    {
+      "v": "sf",
+      "year": 2027,
+      "half": 2,
+      "wave": "2H 2027",
+      "date": null,
+      "label": null,
+      "precision": "half",
+      "planned": true
     }
   ]
 }

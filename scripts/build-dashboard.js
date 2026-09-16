@@ -27,10 +27,14 @@ for (const m of timeline.milestones) {
     if (!m[f]) problems.push(`${m.id}: missing ${f}`);
   }
   if (!skuKeys.has(m.sku)) problems.push(`${m.id}: unknown sku "${m.sku}"`);
+  if (!timeline.releaseWaves.some(w => w.v === m.v && w.year === +String(m.date).slice(0,4)))
+    problems.push(`${m.id}: year ${String(m.date).slice(0,4)} has no release wave for ${m.v} — extend releaseWaves`);
   if (!["wd", "sf"].includes(m.v)) problems.push(`${m.id}: unknown vendor "${m.v}"`);
   if (!/^https?:\/\//.test(m.src || "")) problems.push(`${m.id}: source is not a URL`);
   const y = +String(m.date).slice(0, 4);
-  if (!(y >= 2021 && y <= 2026)) problems.push(`${m.id}: date ${m.date} outside the 2021–2026 window`);
+  // open-ended on purpose: the atlas keeps growing past 2026
+  const maxYear = new Date().getUTCFullYear() + 2;
+  if (!(y >= 2021 && y <= maxYear)) problems.push(`${m.id}: date ${m.date} outside 2021–${maxYear}`);
 }
 for (const i of insights.insights) {
   for (const e of i.evidence) {

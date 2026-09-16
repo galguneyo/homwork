@@ -71,6 +71,10 @@ nav.top .links a:hover{color:var(--ink); background:var(--glass)}
 nav.top .navsep{width:1px; height:16px; background:var(--glass-line); align-self:center; margin:0 4px; flex:none}
 nav.top .links a.navx{color:var(--ink-2); border:1px solid var(--glass-line); background:var(--glass-2)}
 nav.top .links a.navx:hover{color:var(--ink)}
+nav.top .navdl{appearance:none; font:inherit; font-size:12.5px; padding:5px 11px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--glass-line); background:var(--glass-2); color:var(--ink-2); white-space:nowrap; margin-left:2px}
+nav.top .navdl:hover:not([disabled]){color:var(--ink); background:var(--glass); border-color:var(--glass-hi)}
+nav.top .navdl[disabled]{opacity:.55; cursor:default}
 
 .mast{padding-block:clamp(38px,6vw,70px) 26px}
 .mast h1 .h1b{font-weight:300; color:var(--ink-3); -webkit-text-fill-color:var(--ink-3); letter-spacing:-.01em; white-space:nowrap}
@@ -368,6 +372,7 @@ footer{padding-block:30px 52px; color:var(--ink-3); font-size:12.5px}
       <span class="navsep" aria-hidden="true"></span>
       <a class="navx" href="https://community.workday.com" target="_blank" rel="noopener">Workday Community ↗</a>
       <a class="navx" href="https://pages.community.sap.com/topics/successfactors" target="_blank" rel="noopener">SAP Community ↗</a>
+      <button type="button" class="navdl" id="dlBtn" hidden>HTML 저장 ↓</button>
     </div>
   </div>
 </nav>
@@ -1095,6 +1100,34 @@ document.getElementById("advout").addEventListener("click", e=>{
   state.sel=b.dataset.go; renderMatrix(); renderDrawer();
   document.getElementById("matrix").scrollIntoView({block:"start"});
 });
+
+/* offer the page itself as a downloadable file, where the viewer's session allows it */
+(async ()=>{
+  let dl=null;
+  try{ dl = window.claude && window.claude.use ? await window.claude.use("downloads") : null; }catch(_){ dl=null; }
+  const btn=document.getElementById("dlBtn");
+  if(!dl || !btn) return;          // no capability: the button stays hidden
+  btn.hidden=false;
+  const label=btn.textContent;
+  btn.addEventListener("click", async ()=>{
+    btn.disabled=true; btn.textContent="준비 중…";
+    let msg="저장됨";
+    try{
+      await dl.save({
+        filename:"Global-SaaS-HCM-Good-to-Know_"+DATA.meta.compiled+".html",
+        data:"<!doctype html>\n"+document.documentElement.outerHTML
+      });
+    }catch(err){
+      const c = err && err.code;
+      msg = c==="declined" ? label
+          : c==="rate_limited" ? "잠시 후 다시"
+          : c==="too_large" ? "파일이 너무 큼"
+          : "저장 실패";
+    }
+    btn.textContent=msg;
+    setTimeout(()=>{ btn.textContent=label; btn.disabled=false; }, 1800);
+  });
+})();
 
 /* optional AI synthesis — appears only when the viewer's session can run it */
 (async ()=>{

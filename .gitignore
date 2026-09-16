@@ -1,0 +1,8 @@
+# verification tooling — installed on demand, never part of the deliverable
+node_modules/
+package-lock.json
+package.json
+
+# scratch
+*.png
+.DS_Store
